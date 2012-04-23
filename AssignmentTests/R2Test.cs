@@ -7,9 +7,9 @@ using NUnit.Framework;
 namespace AssignmentTests
 {
 	public enum R2OutputLineType {
-		R2OutputLineTypeWhitespace,
-		R2OutputLineTypeHeader,
-		R2OutputLineTypeRange
+		Whitespace,
+		Header,
+		Range
 	};
 	
 	[TestFixture()]
@@ -30,8 +30,8 @@ namespace AssignmentTests
 				List<String> lines = this.Runner.GetOutputLines ();
 				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
 				
-				Assert.AreEqual (3, categorizedLines[R2OutputLineType.R2OutputLineTypeHeader].Count, "Unexpected number of header lines printed");
-				Assert.AreEqual (12, categorizedLines[R2OutputLineType.R2OutputLineTypeRange].Count, "Unexpected number of range lines printed");
+				Assert.AreEqual (3, categorizedLines[R2OutputLineType.Header].Count, "Unexpected number of header lines printed");
+				Assert.AreEqual (12, categorizedLines[R2OutputLineType.Range].Count, "Unexpected number of range lines printed");
 			}
 		}
 		
@@ -46,12 +46,21 @@ namespace AssignmentTests
 				List<string> lines = this.Runner.GetOutputLines ();
 				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
 				
-				Assert.AreEqual (0, categorizedLines[R2OutputLineType.R2OutputLineTypeRange].Count, "Program provided unexpected output");
-				Assert.AreEqual (0, categorizedLines[R2OutputLineType.R2OutputLineTypeHeader].Count, "Program provided unexpected output");
+				Assert.AreEqual (0, categorizedLines[R2OutputLineType.Range].Count, "Program provided unexpected output");
+				Assert.AreEqual (0, categorizedLines[R2OutputLineType.Header].Count, "Program provided unexpected output");
 				
 				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open))
 				{
+					StreamReader reader = new StreamReader(outputReadStream);
+					List<string> fileLines = new List<string>();
+					String line;
+					while((line = reader.ReadLine ()) != null) {
+						fileLines.Add (line);
+					}
+					categorizedLines = this.CategorizeLines(fileLines);
 					
+					Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, "Program had unexpected number of header lines in output file");
+					Assert.AreEqual (4, categorizedLines[R2OutputLineType.Range].Count, "Program had unexpected number of range lines in output file");
 				}
 			}
 		}
@@ -69,9 +78,9 @@ namespace AssignmentTests
 			
 			foreach (string line in lines)
 			{
-				if (headerRegex.Matches (line).Count > 0) result[R2OutputLineType.R2OutputLineTypeHeader].Add (line);
-				if (rangeRegex.Matches (line).Count > 0) result[R2OutputLineType.R2OutputLineTypeRange].Add (line);
-				if (whitespaceRegex.Matches (line).Count > 0) result[R2OutputLineType.R2OutputLineTypeWhitespace].Add (line);
+				if (headerRegex.Matches (line).Count > 0) result[R2OutputLineType.Header].Add (line);
+				if (rangeRegex.Matches (line).Count > 0) result[R2OutputLineType.Range].Add (line);
+				if (whitespaceRegex.Matches (line).Count > 0) result[R2OutputLineType.Whitespace].Add (line);
 			}
 			
 			return result;
