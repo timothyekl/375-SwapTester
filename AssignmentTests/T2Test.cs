@@ -94,7 +94,30 @@ namespace AssignmentTests
 		public void TestARMSupport ()
 		{
 			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.t2-frmarm.in")) {
+				this.Runner.StartApp (new string[] {inFile});
+				this.Runner.WriteInputLine ("");
 				
+				List<string> lines = this.Runner.GetOutputLines ();
+				lines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
+				
+				Assert.AreEqual (15, lines.Count, "Unexpected number of output lines");
+				
+				Assert.AreEqual (1, lines.FindAll ((string s) => (new Regex("ARM$")).IsMatch (s)).Count, "Unexpected number of ARM loans displayed");
+				Assert.AreEqual (1, lines.FindAll ((string s) => (new Regex("^Margin.*\\.5$")).IsMatch (s)).Count, "Margin rate not given properly for ARM loan");
+			}
+		}
+		
+		[Test()]
+		public void TestErrors ()
+		{
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.t2-frmarm.in")) {
+				this.Runner.StartApp (new string[] {inFile});
+				this.Runner.WriteInputLine ("");
+				
+				List<string> lines = this.Runner.GetOutputLines ();
+				lines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
+				
+				Assert.AreEqual (11, lines.Count, "Unexpected number of output lines");
 			}
 		}
 	}
