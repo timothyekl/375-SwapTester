@@ -15,6 +15,8 @@ namespace AssignmentTests
 		string ApplicationName {get; set;}
 		Process _process;
 		
+		public static Int32 PROCESS_TIMEOUT = 2000;
+		
 		/**
 		 * Build a new application launcher with the given app path
 		 */
@@ -78,7 +80,7 @@ namespace AssignmentTests
 		}
 		
 		public void StartApp(string[] args) {
-			this.StartApp(args, 0);
+			this.StartApp(args, PROCESS_TIMEOUT);
 		}
 		
 		public bool StopApp(Int32 waitTime) {
