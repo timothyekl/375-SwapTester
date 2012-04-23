@@ -12,7 +12,8 @@ namespace AssignmentTests
 		[Test()]
 		public void TestParsing()
 		{
-			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.t1.in"))
+			string resource = "AssignmentTests.Resources.t1.in";
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile (resource))
 			{
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine ("");
@@ -23,7 +24,8 @@ namespace AssignmentTests
 				});
 				
 				// Check total output count
-				Assert.AreEqual (21, lines.Count, "Unexpected number of output lines");
+				Assert.AreEqual (21, lines.Count, new ExtendedMessage(TestHelper.ExtractResourceToLineArray(resource), lines,
+					"Unexpected number of output lines", "Note: this test should detect no loan errors"));
 				
 				// Check ordering of lines
 				List<string> currentFaceLines = lines.FindAll((string line) => (new Regex("^Current [Ff]ace:")).IsMatch (line));

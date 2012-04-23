@@ -50,6 +50,7 @@
     <Compile Include="ATest.cs" />
     <Compile Include="T1Test.cs" />
     <Compile Include="T2Test.cs" />
+    <Compile Include="Resources\ExtendedMessage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

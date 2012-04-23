@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -19,6 +20,20 @@ namespace AssignmentTests
 			}
 			
 			return new TempFileWrapper(tempFileName);
+		}
+		
+		public static List<string> ExtractResourceToLineArray (string resourceName) {
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			Stream resourceStream = assembly.GetManifestResourceStream(resourceName);
+			StreamReader reader = new StreamReader(resourceStream);
+			
+			string tempFileName = Path.GetTempFileName ();
+			List<string> result = new List<string>();
+			string line;
+			while((line = reader.ReadLine ()) != null) {
+				result.Add(line);
+			}
+			return result;
 		}
 	}
 	
