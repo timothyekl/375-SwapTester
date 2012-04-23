@@ -9,7 +9,9 @@ namespace AssignmentTests
 	public enum R2OutputLineType {
 		Whitespace,
 		Header,
-		Range
+		Range,
+		Error,
+		Other
 	};
 	
 	[TestFixture(), Timeout(2000)]
@@ -138,11 +140,31 @@ namespace AssignmentTests
 			}
 		}
 		
+		[Test()]
+		public void TestErrors ()
+		{
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r2-error.in"))
+			{
+				this.Runner.StartApp (new string[] {inFile});
+				this.Runner.WriteInputLine ("");
+				
+				List<String> lines = this.Runner.GetOutputLines ();
+				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
+				
+				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, "Unexpected number of header lines printed");
+				Assert.AreEqual (0, categorizedLines[R2OutputLineType.Range].Count, "Unexpected number of range lines printed");
+				Assert.AreEqual (3, categorizedLines[R2OutputLineType.Error].Count + categorizedLines[R2OutputLineType.Other].Count, "Unexpected number of error indicators printed");
+				
+				// TODO able to test for more specific errors?
+			}
+		}
+		
 		public Dictionary<R2OutputLineType,List<string>> CategorizeLines (List<string> lines)
 		{
 			Regex headerRegex = new Regex("^Range");
 			Regex rangeRegex = new Regex("^\\[(-?[0-9]*)-(-?[0-9]*)\\)");
 			Regex whitespaceRegex = new Regex("^\\s*$");
+			Regex errorRegex = new Regex("^Error in file$");
 			
 			Dictionary<R2OutputLineType,List<string>> result = new Dictionary<R2OutputLineType, List<string>>();
 			foreach (R2OutputLineType type in Enum.GetValues (typeof(R2OutputLineType))) {
@@ -152,8 +174,10 @@ namespace AssignmentTests
 			foreach (string line in lines)
 			{
 				if (headerRegex.Matches (line).Count > 0) result[R2OutputLineType.Header].Add (line);
-				if (rangeRegex.Matches (line).Count > 0) result[R2OutputLineType.Range].Add (line);
-				if (whitespaceRegex.Matches (line).Count > 0) result[R2OutputLineType.Whitespace].Add (line);
+				else if (rangeRegex.Matches (line).Count > 0) result[R2OutputLineType.Range].Add (line);
+				else if (whitespaceRegex.Matches (line).Count > 0) result[R2OutputLineType.Whitespace].Add (line);
+				else if (errorRegex.Matches (line).Count > 0) result[R2OutputLineType.Error].Add (line);
+				else result[R2OutputLineType.Other].Add (line);
 			}
 			
 			return result;
