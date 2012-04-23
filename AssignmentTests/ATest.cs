@@ -9,17 +9,21 @@ namespace AssignmentTests
 	{
 		public static int PROCESS_WAIT_TIME = 1000;
 		
+		public static string AppName {get; set;}
+		
 		protected AppRunner Runner {get; set;}
 		
 		[TestFixtureSetUp()]
 		public void TestFixtureSetUp ()
 		{
 			// Get app name under test
-			Console.Write ("Executable under test: ");
-			string appName = Console.ReadLine ();
-			Console.WriteLine ();
+			if(AppName == null) {
+				Console.Write ("Executable under test: ");
+				AppName = Console.ReadLine ();
+				Console.WriteLine ();
+			}
 			
-			this.Runner = new AppRunner(appName);
+			this.Runner = new AppRunner(AppName);
 		}
 		
 		[TearDown()]

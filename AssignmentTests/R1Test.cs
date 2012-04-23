@@ -12,16 +12,20 @@ namespace AssignmentTests
 		[Test()]
 		public void TestEmpty ()
 		{
-			using(TempFileWrapper tempFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.empty.txt")) {
+			string resource = "AssignmentTests.Resources.empty.txt";
+			using(TempFileWrapper tempFile = TestHelper.ExtractResourceToTempFile (resource)) {
 				this.Runner.StartApp (new string[] {tempFile});
 				
 				this.Runner.WriteInputLine ("");
 				
 				List<String> lines = this.Runner.GetOutputLines ();
+				lines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
 				Assert.AreEqual (1, lines.Count, "Unexpected number of lines in output");
 				
-				Regex firstLineRegex = new Regex("^Range Name: .*$");
-				Assert.IsTrue (firstLineRegex.Matches(lines[0]).Count > 0, "First line of text did not match");
+				List<string> input = TestHelper.ExtractResourceToLineArray(resource);
+				Regex firstLineRegex = new Regex("^[Rr]ange.*: .*$");
+				Assert.IsTrue (firstLineRegex.Matches(lines[0]).Count > 0, 
+				               new ExtendedMessage(input, lines, "First line of text did not match"));
 			}
 		}
 		
@@ -34,6 +38,7 @@ namespace AssignmentTests
 				this.Runner.WriteInputLine ("");
 				
 				List<String> lines = this.Runner.GetOutputLines ();
+				lines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
 				Assert.AreEqual (5, lines.Count, "Unexpected number of lines in output");
 				
 				// TODO match the output more closely
