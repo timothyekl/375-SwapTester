@@ -20,36 +20,46 @@ namespace AssignmentTests
 		[Test()]
 		public void TestBatchLoad ()
 		{
+			string resource = "AssignmentTests.Resources.r1-full.in";
 			// Use the R1 input file multiple times
 			// The temp file wrapper semantics will give different range names
-			using(TempFileWrapper tempFile1 = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in"),
-			      tempFile2 = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in"),
-			      tempFile3 = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in"))
+			using(TempFileWrapper tempFile1 = TestHelper.ExtractResourceToTempFile (resource),
+			      tempFile2 = TestHelper.ExtractResourceToTempFile (resource),
+			      tempFile3 = TestHelper.ExtractResourceToTempFile (resource))
 			{
 				this.Runner.StartApp (new string[] {tempFile1, tempFile2, tempFile3});
 				this.Runner.WriteInputLine ("");
 				
-				List<String> lines = this.Runner.GetOutputLines ();
+				List<string> lines = this.Runner.GetOutputLines ();
 				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
 				
-				Assert.AreEqual (3, categorizedLines[R2OutputLineType.Header].Count, "Unexpected number of header lines printed");
-				Assert.AreEqual (12, categorizedLines[R2OutputLineType.Range].Count, "Unexpected number of range lines printed");
+				List<string> input = new List<string>();
+				for(int i = 0; i < 3; i++) input.AddRange(TestHelper.ExtractResourceToLineArray(resource));
+				Assert.AreEqual (3, categorizedLines[R2OutputLineType.Header].Count, 
+				                 new ExtendedMessage(input, lines, "Unexpected number of header lines printed"));
+				Assert.AreEqual (12, categorizedLines[R2OutputLineType.Range].Count,
+				                 new ExtendedMessage(input, lines, "Unexpected number of range lines printed"));
 			}
 		}
 		
 		[Test()]
 		public void TestFileOutput ()
 		{
+			string resource = "AssignmentTests.Resources.r1-full.in";
 			using(TempFileWrapper outFile = new TempFileWrapper(Path.GetTempFileName ()),
-			      inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in"))
+			      inFile = TestHelper.ExtractResourceToTempFile (resource))
 			{
 				this.Runner.StartApp (new string[] {"-output", outFile, inFile});
 				
 				List<string> lines = this.Runner.GetOutputLines ();
 				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
 				
-				Assert.AreEqual (0, categorizedLines[R2OutputLineType.Range].Count, "Program provided unexpected output");
-				Assert.AreEqual (0, categorizedLines[R2OutputLineType.Header].Count, "Program provided unexpected output");
+				int total = 0;
+				foreach (R2OutputLineType type in Enum.GetValues (typeof(R2OutputLineType))) {
+					total += categorizedLines[type].Count;
+				}
+				List<string> input = TestHelper.ExtractResourceToLineArray(resource);
+				Assert.AreEqual (0, total, new ExtendedMessage(input, lines, "Program provided unexpected output", "All output should be to file"));
 				
 				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open))
 				{
@@ -61,8 +71,10 @@ namespace AssignmentTests
 					}
 					categorizedLines = this.CategorizeLines(fileLines);
 					
-					Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, "Program had unexpected number of header lines in output file");
-					Assert.AreEqual (4, categorizedLines[R2OutputLineType.Range].Count, "Program had unexpected number of range lines in output file");
+					Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, 
+					                 new ExtendedMessage(input, fileLines, "Program had unexpected number of header lines in output file"));
+					Assert.AreEqual (4, categorizedLines[R2OutputLineType.Range].Count, 
+					                 new ExtendedMessage(input, fileLines, "Program had unexpected number of range lines in output file"));
 				}
 			}
 		}
@@ -70,17 +82,22 @@ namespace AssignmentTests
 		[Test()]
 		public void TestFileOutputWithBatch ()
 		{
+			string resource = "AssignmentTests.Resources.r1-full.in";
 			using(TempFileWrapper outFile = new TempFileWrapper(Path.GetTempFileName ()),
-			      inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in"),
-			      inFile2 = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in"))
+			      inFile = TestHelper.ExtractResourceToTempFile (resource),
+			      inFile2 = TestHelper.ExtractResourceToTempFile (resource))
 			{
 				this.Runner.StartApp (new string[] {"-output", outFile, inFile, inFile2});
 				
 				List<string> lines = this.Runner.GetOutputLines ();
 				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
 				
-				Assert.AreEqual (0, categorizedLines[R2OutputLineType.Range].Count, "Program provided unexpected output");
-				Assert.AreEqual (0, categorizedLines[R2OutputLineType.Header].Count, "Program provided unexpected output");
+				int total = 0;
+				foreach (R2OutputLineType type in Enum.GetValues (typeof(R2OutputLineType))) {
+					total += categorizedLines[type].Count;
+				}
+				List<string> input = TestHelper.ExtractResourceToLineArray(resource);
+				Assert.AreEqual (0, total, new ExtendedMessage(input, lines, "Program provided unexpected output", "All output should be to file"));
 				
 				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open))
 				{
@@ -92,8 +109,10 @@ namespace AssignmentTests
 					}
 					categorizedLines = this.CategorizeLines(fileLines);
 					
-					Assert.AreEqual (2, categorizedLines[R2OutputLineType.Header].Count, "Program had unexpected number of header lines in output file");
-					Assert.AreEqual (8, categorizedLines[R2OutputLineType.Range].Count, "Program had unexpected number of range lines in output file");
+					Assert.AreEqual (2, categorizedLines[R2OutputLineType.Header].Count, 
+					                 new ExtendedMessage(input, fileLines, "Program had unexpected number of header lines in output file"));
+					Assert.AreEqual (8, categorizedLines[R2OutputLineType.Range].Count, 
+					                 new ExtendedMessage(input, fileLines, "Program had unexpected number of range lines in output file"));
 				}
 			}
 		}
@@ -101,7 +120,8 @@ namespace AssignmentTests
 		[Test()]
 		public void TestNegativeRanges ()
 		{
-			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r2-negative.in"))
+			string resource = "AssignmentTests.Resources.r2-negative.in";
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile (resource))
 			{
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine ("");
@@ -109,12 +129,14 @@ namespace AssignmentTests
 				List<String> lines = this.Runner.GetOutputLines ();
 				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
 				
-				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, "Unexpected number of header lines printed");
-				Assert.AreEqual (3, categorizedLines[R2OutputLineType.Range].Count, "Unexpected number of range lines printed");
+				List<string> input = TestHelper.ExtractResourceToLineArray(resource);
+				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, new ExtendedMessage(input, lines, "Unexpected number of header lines printed"));
+				Assert.AreEqual (3, categorizedLines[R2OutputLineType.Range].Count, new ExtendedMessage(input, lines, "Unexpected number of range lines printed"));
 				
 				int[] occurrences = new int[] {1, 2, 1};
 				for(int i = 0; i < 3; i++) {
-					Assert.AreEqual (occurrences[i], (new Regex("100")).Matches(categorizedLines[R2OutputLineType.Range][i]).Count, "Bad output in range entry " + (i + 1));
+					Assert.AreEqual (occurrences[i], (new Regex("100")).Matches(categorizedLines[R2OutputLineType.Range][i]).Count, 
+					                 new ExtendedMessage(input, lines, "Bad output in range entry " + (i + 1)));
 				}
 			}
 		}
@@ -122,7 +144,8 @@ namespace AssignmentTests
 		[Test()]
 		public void TestExtraValues ()
 		{
-			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r2-extra.in"))
+			string resource = "AssignmentTests.Resources.r2-extra.in";
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile (resource))
 			{
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine ("");
@@ -130,12 +153,14 @@ namespace AssignmentTests
 				List<String> lines = this.Runner.GetOutputLines ();
 				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
 				
-				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, "Unexpected number of header lines printed");
-				Assert.AreEqual (4, categorizedLines[R2OutputLineType.Range].Count, "Unexpected number of range lines printed");
+				List<string> input = TestHelper.ExtractResourceToLineArray(resource);
+				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, new ExtendedMessage(input, lines, "Unexpected number of header lines printed"));
+				Assert.AreEqual (4, categorizedLines[R2OutputLineType.Range].Count, new ExtendedMessage(input, lines, "Unexpected number of range lines printed"));
 				
 				Regex extraValueRegex = new Regex("\\s*\\.[0-9]+$");
 				for(int i = 0; i < 4; i++) {
-					Assert.AreEqual (1, extraValueRegex.Matches (categorizedLines[R2OutputLineType.Range][i]).Count, "Extra value not found in output line " + (i + 1));
+					Assert.AreEqual (1, extraValueRegex.Matches (categorizedLines[R2OutputLineType.Range][i]).Count, 
+					                 new ExtendedMessage(input, lines, "Extra value not found in output line " + (i + 1)));
 				}
 			}
 		}
@@ -143,7 +168,8 @@ namespace AssignmentTests
 		[Test()]
 		public void TestErrors ()
 		{
-			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r2-error.in"))
+			string resource = "AssignmentTests.Resources.r2-error.in";
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile (resource))
 			{
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine ("");
@@ -151,9 +177,11 @@ namespace AssignmentTests
 				List<String> lines = this.Runner.GetOutputLines ();
 				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
 				
-				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, "Unexpected number of header lines printed");
-				Assert.AreEqual (0, categorizedLines[R2OutputLineType.Range].Count, "Unexpected number of range lines printed");
-				Assert.AreEqual (3, categorizedLines[R2OutputLineType.Error].Count + categorizedLines[R2OutputLineType.Other].Count, "Unexpected number of error indicators printed");
+				List<string> input = TestHelper.ExtractResourceToLineArray(resource);
+				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, new ExtendedMessage(input, lines, "Unexpected number of header lines printed"));
+				Assert.AreEqual (0, categorizedLines[R2OutputLineType.Range].Count, new ExtendedMessage(input, lines, "Unexpected number of range lines printed"));
+				Assert.AreEqual (3, categorizedLines[R2OutputLineType.Error].Count + categorizedLines[R2OutputLineType.Other].Count, 
+				                 new ExtendedMessage(input, lines, "Unexpected number of error indicators printed"));
 				
 				// TODO able to test for more specific errors?
 			}
