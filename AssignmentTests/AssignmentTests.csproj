@@ -49,6 +49,7 @@
     <Compile Include="R2Test.cs" />
     <Compile Include="ATest.cs" />
     <Compile Include="T1Test.cs" />
+    <Compile Include="Resources\T2Test.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
