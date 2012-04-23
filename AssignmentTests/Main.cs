@@ -1,6 +1,6 @@
 using System;
 
-namespace Assignment2
+namespace AssignmentTests
 {
 	class MainClass
 	{

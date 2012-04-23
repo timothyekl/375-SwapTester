@@ -3,7 +3,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace Assignment2
+namespace AssignmentTests
 {
 	/**
 	 * Class responsible for encapsulating process launches, I/O, and exits.
