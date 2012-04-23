@@ -7,42 +7,8 @@ using NUnit.Framework;
 namespace AssignmentTests
 {
 	[TestFixture()]
-	public class R1Test
+	public class R1Test : ATest
 	{
-		public static int PROCESS_WAIT_TIME = 1000;
-		
-		private AppRunner Runner {get; set;}
-		
-		[TestFixtureSetUp()]
-		public void TestFixtureSetUp ()
-		{
-			// Get app name under test
-			Console.Write ("R1 executable under test: ");
-			string appName = Console.ReadLine ();
-			Console.WriteLine ();
-			
-			this.Runner = new AppRunner(appName);
-		}
-		
-		[TearDown()]
-		public void TearDown ()
-		{
-			Assert.IsTrue (this.Runner.StopApp(PROCESS_WAIT_TIME), "Application did not stop in time");
-		}
-		
-		[Test()]
-		public void TestTests ()
-		{
-			Assert.IsTrue (true, "testing framework isn't feeling well today");
-		}
-		
-		[Test()]
-		public void TestProcessLaunches ()
-		{
-			this.Runner.StartApp (null);
-			Assert.IsTrue (this.Runner.IsRunning(), "Application did not launch properly.");
-		}
-		
 		[Test()]
 		public void TestEmpty ()
 		{

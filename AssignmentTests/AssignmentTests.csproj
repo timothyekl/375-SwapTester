@@ -52,6 +52,8 @@
     <Compile Include="AppRunner.cs" />
     <Compile Include="R1Test.cs" />
     <Compile Include="TestHelper.cs" />
+    <Compile Include="R2Test.cs" />
+    <Compile Include="ATest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
