@@ -96,6 +96,27 @@ namespace AssignmentTests
 			}
 		}
 		
+		[Test(), Timeout(2000)]
+		public void TestNegativeRanges ()
+		{
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r2-negative.in"))
+			{
+				this.Runner.StartApp (new string[] {inFile});
+				this.Runner.WriteInputLine ("");
+				
+				List<String> lines = this.Runner.GetOutputLines ();
+				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
+				
+				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, "Unexpected number of header lines printed");
+				Assert.AreEqual (3, categorizedLines[R2OutputLineType.Range].Count, "Unexpected number of range lines printed");
+				
+				int[] occurrences = new int[] {1, 2, 1};
+				for(int i = 0; i < 3; i++) {
+					Assert.AreEqual (occurrences[i], (new Regex("100")).Matches(categorizedLines[R2OutputLineType.Range][i]).Count, "Bad output in range entry " + (i + 1));
+				}
+			}
+		}
+		
 		public Dictionary<R2OutputLineType,List<string>> CategorizeLines (List<string> lines)
 		{
 			Regex headerRegex = new Regex("^Range");
