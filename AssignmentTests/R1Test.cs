@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 
@@ -48,7 +46,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestEmpty ()
 		{
-			string tempFile = this.ExtractResourceToTempFile ("AssignmentTests.Resources.empty.txt");
+			string tempFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.empty.txt");
 			
 			this.Runner.StartApp (new string[] {tempFile});
 			
@@ -68,7 +66,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestFull ()
 		{
-			string tempFile = this.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in");
+			string tempFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in");
 			
 			this.Runner.StartApp (new string[] {tempFile});
 			
@@ -82,20 +80,6 @@ namespace AssignmentTests
 			File.Delete (tempFile);
 			
 			Assert.IsTrue (this.Runner.StopApp(PROCESS_WAIT_TIME), "Application did not stop in time");
-		}
-		
-		private string ExtractResourceToTempFile (string resourceName) {
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			Stream resourceStream = assembly.GetManifestResourceStream(resourceName);
-			StreamReader reader = new StreamReader(resourceStream);
-			
-			string tempFileName = Path.GetTempFileName ();
-			using(FileStream tempWriteStream = File.Open(tempFileName, FileMode.Open)) {
-				Byte[] text = new UTF8Encoding(true).GetBytes(reader.ReadToEnd());
-				tempWriteStream.Write(text, 0, text.Length);
-			}
-			
-			return tempFileName;
 		}
 	}
 }

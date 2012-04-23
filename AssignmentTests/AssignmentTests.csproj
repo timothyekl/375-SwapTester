@@ -51,6 +51,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AppRunner.cs" />
     <Compile Include="R1Test.cs" />
+    <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
