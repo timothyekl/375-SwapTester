@@ -11,13 +11,12 @@ namespace AssignmentTests
 		[TestFixtureSetUp()]
 		public void TestFixtureSetUp ()
 		{
-			this.Runner = new AppRunner("SwapAssignment1.exe");
-		}
-		
-		[SetUp()]
-		public void SetUp ()
-		{
-			this.Runner.StartApp (null);
+			// Get app name under test
+			Console.Write ("Name of executable under test: ");
+			string appName = Console.ReadLine ();
+			Console.WriteLine ();
+			
+			this.Runner = new AppRunner(appName);
 		}
 		
 		[TearDown()]
@@ -30,6 +29,13 @@ namespace AssignmentTests
 		public void TestTests ()
 		{
 			Assert.IsTrue (true, "testing framework isn't feeling well today");
+		}
+		
+		[Test()]
+		public void TestProcessLaunches ()
+		{
+			this.Runner.StartApp (null);
+			Assert.IsTrue (this.Runner.IsRunning(), "Application did not launch properly.");
 		}
 	}
 }

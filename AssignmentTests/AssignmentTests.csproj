@@ -52,6 +52,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="R1\" />
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\r1-full.in" />
+    <None Include="Resources\r1-full.out" />
   </ItemGroup>
 </Project>

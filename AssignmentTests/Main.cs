@@ -8,17 +8,8 @@ namespace AssignmentTests
 	{
 		public static void Main (string[] args)
 		{
-			// Get app name under test
-			Console.Write ("Name of executable under test: ");
-			string exeName = Console.ReadLine ();
-			Console.WriteLine ();
-			
-			// Build app runner
-			AppRunner runner = new AppRunner(exeName);
-			
-			// test code
 			NUnit.ConsoleRunner.Runner.Main(new string[] {
-		       Assembly.GetExecutingAssembly().Location, 
+		       Assembly.GetExecutingAssembly().Location 
 		    });
 		}
 	}
