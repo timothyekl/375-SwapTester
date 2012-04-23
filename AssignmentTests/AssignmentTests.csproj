@@ -64,9 +64,9 @@
     <EmbeddedResource Include="Resources\r2-error.in" />
     <EmbeddedResource Include="Resources\t1.in" />
     <EmbeddedResource Include="Resources\t2-frmarm.in" />
+    <EmbeddedResource Include="Resources\t2-errors.in" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\t1.out" />
-    <None Include="Resources\t2-errors.in" />
   </ItemGroup>
 </Project>

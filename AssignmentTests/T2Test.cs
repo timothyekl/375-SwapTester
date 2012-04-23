@@ -110,7 +110,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestErrors ()
 		{
-			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.t2-frmarm.in")) {
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.t2-errors.in")) {
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine ("");
 				
@@ -118,6 +118,15 @@ namespace AssignmentTests
 				lines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
 				
 				Assert.AreEqual (11, lines.Count, "Unexpected number of output lines");
+				
+				List<string> errorLines = lines.FindAll ((string s) => (new Regex("^Error.*ABC123")).IsMatch (s));
+				Assert.AreEqual (2, errorLines.Count, "Wrong number of errors detected");
+				foreach (string errorLine in errorLines) {
+					Int32 idx = lines.IndexOf(errorLine) + 1;
+					if(!(new Regex("^Unknown.*XXX")).IsMatch (lines[idx]) && !(new Regex("[Ff]ace.*[Vv]alue.*0")).IsMatch (lines[idx])) {
+						Assert.Fail ("Wrong error detected (on text line " + (idx + 1) + ")");
+					}
+				}
 			}
 		}
 	}
