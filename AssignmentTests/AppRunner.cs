@@ -3,6 +3,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 
 namespace AssignmentTests
 {
@@ -42,9 +43,12 @@ namespace AssignmentTests
 		}
 		
 		/**
-		 * Launch this runner's process. Pass list of arguments to pass through to command; pass null for empty arg string.
+		 * Launch this runner's process.
+		 * 
+		 * @param args Arguments for process to run; joined & quoted as necessary. Pass null for no args
+		 * @param timeout Maximum length process can run. Pass 0 for no timeout
 		 */
-		public void StartApp(string[] args) {
+		public void StartApp(string[] args, Int32 timeout) {
 			if(this.IsRunning ()) return;
 			this.ConfigureProcess ();
 			
@@ -63,9 +67,23 @@ namespace AssignmentTests
 			_process.StartInfo.Arguments = argStr;
 			
 			_process.Start ();
+			
+			if(timeout > 0) {
+				Timer timer = new Timer();
+				timer.Elapsed += this.AppTimeoutHandler;
+				timer.Interval = timeout;
+				timer.AutoReset = false; // only run once
+				timer.Start();
+			}
+		}
+		
+		public void StartApp(string[] args) {
+			this.StartApp(args, 0);
 		}
 		
 		public bool StopApp(Int32 waitTime) {
+			if(!this.IsRunning()) return true;
+			
 			_process.StandardOutput.ReadToEnd ();
 			_process.StandardError.ReadToEnd ();
 			return _process.WaitForExit (waitTime);
@@ -113,6 +131,10 @@ namespace AssignmentTests
 		// Event handler for process exit
 		private void AppStopHandler(object sender, EventArgs e) {
 			_process = null;
+		}
+		
+		private void AppTimeoutHandler(object sender, EventArgs e) {
+			this.KillApp();
 		}
 	}
 }

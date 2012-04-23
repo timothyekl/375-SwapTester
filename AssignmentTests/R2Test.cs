@@ -17,8 +17,8 @@ namespace AssignmentTests
 			      tempFile2 = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in"),
 			      tempFile3 = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in"))
 			{
-				this.Runner.StartApp (new string[] {tempFile1, tempFile2, tempFile3});
-				this.Runner.WriteInputLine ("");
+				this.Runner.StartApp (new string[] {tempFile1, tempFile2, tempFile3}, 2000);
+				//this.Runner.WriteInputLine ("");
 				
 				List<String> lines = this.Runner.GetOutputLines ();
 				
