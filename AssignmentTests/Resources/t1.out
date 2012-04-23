@@ -1,0 +1,23 @@
+Loan Name: A
+Loan Type: FRM
+Face Value: 7
+Current Face: 3
+Issue Date: 4/9/1992 12:00:00 AM
+Maturity Date: 4/9/2022 12:00:00 AM
+Coupon Rate: 5.25
+
+Loan Name: B
+Loan Type: FRM
+Face Value: 6
+Current Face: 2
+Issue Date: 4/9/2012 12:00:00 AM
+Maturity Date: 4/9/2042 12:00:00 AM
+Coupon Rate: 4.25
+
+Loan Name: C
+Loan Type: FRM
+Face Value: 5
+Current Face: 1
+Issue Date: 4/9/1992 12:00:00 AM
+Maturity Date: 4/9/2022 12:00:00 AM
+Coupon Rate: 5.25

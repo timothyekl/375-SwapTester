@@ -20,7 +20,7 @@ namespace AssignmentTests
 				if(code.Length != 2) continue;
 				
 				type = code[0];
-				if(type != 'R' && type != 'A') {type = 'x'; continue;}
+				if(type != 'R' && type != 'T') {type = 'x'; continue;}
 				
 				number = Int32.Parse (code.Substring(1));
 				if(number < 1 || number > 9) {number = 0; continue;}
