@@ -33,7 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.framework" />
     <Reference Include="nunit.core, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Private>False</Private>
     </Reference>
@@ -41,6 +40,9 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit-console-runner, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -55,7 +57,8 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\r1-full.in" />
-    <None Include="Resources\r1-full.out" />
+    <EmbeddedResource Include="Resources\r1-full.in" />
+    <EmbeddedResource Include="Resources\r1-full.out" />
+    <EmbeddedResource Include="Resources\empty.txt" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace AssignmentTests
@@ -24,13 +25,7 @@ namespace AssignmentTests
 				throw new Exception("App file '" + this.ApplicationName + "' does not exist");
 			}
 			
-			_process = new Process();
-			_process.StartInfo.FileName = this.ApplicationName;
-			_process.StartInfo.UseShellExecute = false;
-			_process.StartInfo.RedirectStandardError = true;
-			_process.StartInfo.RedirectStandardInput = true;
-			_process.StartInfo.RedirectStandardOutput = true;
-			_process.Exited += this.AppStopHandler;
+			this.ConfigureProcess ();
 		}
 		
 		/**
@@ -49,8 +44,9 @@ namespace AssignmentTests
 		/**
 		 * Launch this runner's process. Pass list of arguments to pass through to command; pass null for empty arg string.
 		 */
-		public void StartApp(List<string> args) {
+		public void StartApp(string[] args) {
 			if(this.IsRunning ()) return;
+			this.ConfigureProcess ();
 			
 			// Concatenate arguments
 			string argStr = "";
@@ -69,14 +65,49 @@ namespace AssignmentTests
 			_process.Start ();
 		}
 		
+		public bool StopApp(Int32 waitTime) {
+			_process.StandardOutput.ReadToEnd ();
+			_process.StandardError.ReadToEnd ();
+			return _process.WaitForExit (waitTime);
+		}
+		
 		/**
 		 * Kill this runner's process.
 		 */
-		public void StopApp() {
+		public void KillApp() {
 			if(!this.IsRunning ()) return;
 			
 			_process.Kill ();
 			_process = null;
+		}
+		
+		public void WriteInputLine (string line) {
+			if(!this.IsRunning ()) return;
+			
+			_process.StandardInput.WriteLine (line);
+			_process.StandardInput.Flush ();
+		}
+		
+		public List<String> GetOutputLines () {
+			if(!this.IsRunning ()) return null;
+			
+			string line;
+			List<String> lines = new List<String>();
+			while((line = _process.StandardOutput.ReadLine ()) != null) {
+				lines.Add (line);
+			}
+			return lines;
+		}
+		
+		// Configuration for system process execution
+		private void ConfigureProcess() {
+			_process = new Process();
+			_process.StartInfo.FileName = this.ApplicationName;
+			_process.StartInfo.UseShellExecute = false;
+			_process.StartInfo.RedirectStandardError = true;
+			_process.StartInfo.RedirectStandardInput = true;
+			_process.StartInfo.RedirectStandardOutput = true;
+			_process.Exited += this.AppStopHandler;
 		}
 		
 		// Event handler for process exit
