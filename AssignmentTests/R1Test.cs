@@ -27,7 +27,7 @@ namespace AssignmentTests
 		[TearDown()]
 		public void TearDown ()
 		{
-			this.Runner.KillApp ();
+			Assert.IsTrue (this.Runner.StopApp(PROCESS_WAIT_TIME), "Application did not stop in time");
 		}
 		
 		[Test()]
@@ -59,8 +59,6 @@ namespace AssignmentTests
 			Assert.IsTrue (firstLineRegex.Matches(lines[0]).Count > 0, "First line of text did not match");
 			
 			File.Delete (tempFile);
-			
-			Assert.IsTrue (this.Runner.StopApp(PROCESS_WAIT_TIME), "Application did not stop in time");
 		}
 		
 		[Test()]
@@ -78,8 +76,6 @@ namespace AssignmentTests
 			// TODO match the output more closely
 			
 			File.Delete (tempFile);
-			
-			Assert.IsTrue (this.Runner.StopApp(PROCESS_WAIT_TIME), "Application did not stop in time");
 		}
 	}
 }
