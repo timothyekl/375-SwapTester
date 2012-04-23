@@ -33,11 +33,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="nunit.framework" />
+    <Reference Include="nunit.core, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.core.interfaces, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit-console-runner, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AppRunner.cs" />
+    <Compile Include="R1Test.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="R1\" />
+  </ItemGroup>
 </Project>

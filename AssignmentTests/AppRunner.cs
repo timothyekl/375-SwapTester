@@ -47,9 +47,7 @@ namespace AssignmentTests
 		}
 		
 		/**
-		 * Launch this runner's process.
-		 * 
-		 * @param args Arguments. Auto-quoted. Pass null for empty string.
+		 * Launch this runner's process. Pass list of arguments to pass through to command; pass null for empty arg string.
 		 */
 		public void StartApp(List<string> args) {
 			if(this.IsRunning ()) return;

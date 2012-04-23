@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using NUnit;
 
 namespace AssignmentTests
 {
@@ -15,7 +17,9 @@ namespace AssignmentTests
 			AppRunner runner = new AppRunner(exeName);
 			
 			// test code
-			runner.StartApp (null);
+			NUnit.ConsoleRunner.Runner.Main(new string[] {
+		       Assembly.GetExecutingAssembly().Location, 
+		    });
 		}
 	}
 }
