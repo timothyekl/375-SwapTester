@@ -58,5 +58,6 @@
     <EmbeddedResource Include="Resources\r1-full.out" />
     <EmbeddedResource Include="Resources\empty.txt" />
     <EmbeddedResource Include="Resources\r2-negative.in" />
+    <EmbeddedResource Include="Resources\r2-extra.in" />
   </ItemGroup>
 </Project>

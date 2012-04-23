@@ -12,10 +12,10 @@ namespace AssignmentTests
 		Range
 	};
 	
-	[TestFixture()]
+	[TestFixture(), Timeout(2000)]
 	public class R2Test : ATest
 	{
-		[Test(), Timeout(2000)]
+		[Test()]
 		public void TestBatchLoad ()
 		{
 			// Use the R1 input file multiple times
@@ -35,7 +35,7 @@ namespace AssignmentTests
 			}
 		}
 		
-		[Test(), Timeout(2000)]
+		[Test()]
 		public void TestFileOutput ()
 		{
 			using(TempFileWrapper outFile = new TempFileWrapper(Path.GetTempFileName ()),
@@ -65,7 +65,7 @@ namespace AssignmentTests
 			}
 		}
 		
-		[Test(), Timeout(2000)]
+		[Test()]
 		public void TestFileOutputWithBatch ()
 		{
 			using(TempFileWrapper outFile = new TempFileWrapper(Path.GetTempFileName ()),
@@ -96,7 +96,7 @@ namespace AssignmentTests
 			}
 		}
 		
-		[Test(), Timeout(2000)]
+		[Test()]
 		public void TestNegativeRanges ()
 		{
 			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r2-negative.in"))
@@ -113,6 +113,27 @@ namespace AssignmentTests
 				int[] occurrences = new int[] {1, 2, 1};
 				for(int i = 0; i < 3; i++) {
 					Assert.AreEqual (occurrences[i], (new Regex("100")).Matches(categorizedLines[R2OutputLineType.Range][i]).Count, "Bad output in range entry " + (i + 1));
+				}
+			}
+		}
+		
+		[Test()]
+		public void TestExtraValues ()
+		{
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r2-extra.in"))
+			{
+				this.Runner.StartApp (new string[] {inFile});
+				this.Runner.WriteInputLine ("");
+				
+				List<String> lines = this.Runner.GetOutputLines ();
+				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
+				
+				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, "Unexpected number of header lines printed");
+				Assert.AreEqual (4, categorizedLines[R2OutputLineType.Range].Count, "Unexpected number of range lines printed");
+				
+				Regex extraValueRegex = new Regex("\\s*\\.[0-9]+$");
+				for(int i = 0; i < 4; i++) {
+					Assert.AreEqual (1, extraValueRegex.Matches (categorizedLines[R2OutputLineType.Range][i]).Count, "Extra value not found in output line " + (i + 1));
 				}
 			}
 		}
