@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace AssignmentTests
 {
@@ -7,7 +8,7 @@ namespace AssignmentTests
 	{
 		public List<string> Input {get; set;}
 		public List<string> Output {get; set;}
-		public string Arguments {get; set;}
+		public string[] Arguments {get; set;}
 		
 		private List<string> Messages {get; set;}
 		
@@ -20,9 +21,6 @@ namespace AssignmentTests
 			: this(new string[] {}, input, output, args) { }
 		
 		public ExtendedMessage (string[] cliArgs, List<string> input, List<string> output, params string[] args)
-			: this(string.Join (" ", cliArgs), input, output, args) { }
-		
-		public ExtendedMessage (string cliArgs, List<string> input, List<string> output, params string[] args)
 		{
 			this.Arguments = cliArgs;
 			this.Input = input;
@@ -55,7 +53,23 @@ namespace AssignmentTests
 			}
 			result += "\n";
 			
-			result += "CLI Arguments: " + this.Arguments + "\n\n";
+			result += "CLI Arguments: " + TestHelper.JoinQuoted (this.Arguments) + "\n\n";
+			
+			foreach(string cliArg in this.Arguments)
+			{
+				if(File.Exists (cliArg))
+				{
+					result += "File contents: " + cliArg + "\n";
+					
+					string[] fileContents = File.ReadAllLines (cliArg);
+					foreach(string fileLine in fileContents)
+					{
+						result += "> " + fileLine + "\n";
+					}
+					
+					result += "\n";
+				}
+			}
 			
 			if(this.Input != null)
 			{

@@ -34,6 +34,22 @@ namespace AssignmentTests
 			}
 			return result;
 		}
+		
+		public static string JoinQuoted (string[] args)
+		{
+			string argStr = "";
+			if(args != null) {
+				foreach(string arg in args) {
+					if(arg.IndexOf(' ') != -1) {
+						argStr += '"' + arg + '"';
+					} else {
+						argStr += arg;
+					}
+					argStr += " ";
+				}
+			}
+			return argStr;
+		}
 	}
 	
 	public class TempFileWrapper : IDisposable
