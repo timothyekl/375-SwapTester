@@ -27,7 +27,6 @@ namespace AssignmentTests
 			Stream resourceStream = assembly.GetManifestResourceStream(resourceName);
 			StreamReader reader = new StreamReader(resourceStream);
 			
-			string tempFileName = Path.GetTempFileName ();
 			List<string> result = new List<string>();
 			string line;
 			while((line = reader.ReadLine ()) != null) {

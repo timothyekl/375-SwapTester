@@ -14,6 +14,7 @@ namespace AssignmentTests
 	{
 		string ApplicationName {get; set;}
 		Process _process;
+		ExtendedMessage _extendedMessage;
 		
 		public static Int32 PROCESS_TIMEOUT = 2000;
 		
@@ -67,6 +68,7 @@ namespace AssignmentTests
 				}
 			}
 			_process.StartInfo.Arguments = argStr;
+			_extendedMessage.Arguments = argStr;
 			
 			_process.Start ();
 			
@@ -106,6 +108,8 @@ namespace AssignmentTests
 			
 			_process.StandardInput.WriteLine (line);
 			_process.StandardInput.Flush ();
+			
+			_extendedMessage.Input.Add (line);
 		}
 		
 		public List<String> GetOutputLines () {
@@ -116,7 +120,14 @@ namespace AssignmentTests
 			while((line = _process.StandardOutput.ReadLine ()) != null) {
 				lines.Add (line);
 			}
+			
+			_extendedMessage.Output.AddRange (lines);
+			
 			return lines;
+		}
+		
+		public ExtendedMessage ExtendedMessage () {
+			return _extendedMessage;
 		}
 		
 		// Configuration for system process execution
@@ -128,6 +139,8 @@ namespace AssignmentTests
 			_process.StartInfo.RedirectStandardInput = true;
 			_process.StartInfo.RedirectStandardOutput = true;
 			_process.Exited += this.AppStopHandler;
+			
+			_extendedMessage = new ExtendedMessage();
 		}
 		
 		// Event handler for process exit

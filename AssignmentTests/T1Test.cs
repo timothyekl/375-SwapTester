@@ -24,8 +24,7 @@ namespace AssignmentTests
 				});
 				
 				// Check total output count
-				Assert.AreEqual (21, lines.Count, new ExtendedMessage(TestHelper.ExtractResourceToLineArray(resource), lines,
-					"Unexpected number of output lines", "Note: this test should detect no loan errors"));
+				Assert.AreEqual (21, lines.Count, this.Runner.ExtendedMessage ());
 				
 				// Check ordering of lines
 				List<string> currentFaceLines = lines.FindAll((string line) => (new Regex("^Current [Ff]ace:")).IsMatch (line));

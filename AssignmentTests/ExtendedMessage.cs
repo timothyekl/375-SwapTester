@@ -12,7 +12,7 @@ namespace AssignmentTests
 		private List<string> Messages {get; set;}
 		
 		public ExtendedMessage (params string[] args)
-			: this(new string[] {}, null, null, args) { }
+			: this(new string[] {}, new List<string> (), new List<string> (), args) { }
 		
 		public ExtendedMessage (List<string> input, List<string> output, params string[] args)
 			: this(new string[] {}, input, output, args) { }
