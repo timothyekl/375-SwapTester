@@ -24,7 +24,7 @@ namespace AssignmentTests
 				});
 				
 				// Check total output count
-				Assert.AreEqual (21, lines.Count, this.Runner.ExtendedMessage ());
+				Assert.AreEqual (21, lines.Count, this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of lines in output"));
 				
 				// Check ordering of lines
 				List<string> currentFaceLines = lines.FindAll((string line) => (new Regex("^Current [Ff]ace:")).IsMatch (line));

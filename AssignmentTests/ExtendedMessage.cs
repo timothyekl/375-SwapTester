@@ -11,6 +11,8 @@ namespace AssignmentTests
 		
 		private List<string> Messages {get; set;}
 		
+		// Constructors
+		
 		public ExtendedMessage (params string[] args)
 			: this(new string[] {}, new List<string> (), new List<string> (), args) { }
 		
@@ -28,6 +30,22 @@ namespace AssignmentTests
 			this.Messages = new List<string>(args);
 		}
 		
+		// Fluent methods
+		
+		public ExtendedMessage WithMessage(string msg)
+		{
+			this.Messages.Add (msg);
+			return this;
+		}
+		
+		public ExtendedMessage WithMessages(params string[] msgs)
+		{
+			this.Messages.AddRange (msgs);
+			return this;
+		}
+		
+		// Stringifying
+		
 		public override string ToString ()
 		{
 			string result = "";
@@ -36,6 +54,8 @@ namespace AssignmentTests
 				result += message + "\n";
 			}
 			result += "\n";
+			
+			result += "CLI Arguments: " + this.Arguments + "\n\n";
 			
 			if(this.Input != null)
 			{
