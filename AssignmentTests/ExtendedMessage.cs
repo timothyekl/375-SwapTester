@@ -7,16 +7,22 @@ namespace AssignmentTests
 	{
 		public List<string> Input {get; set;}
 		public List<string> Output {get; set;}
+		public string Arguments {get; set;}
 		
 		private List<string> Messages {get; set;}
 		
 		public ExtendedMessage (params string[] args)
-		{
-			this.Messages = new List<string>(args);
-		}
+			: this(new string[] {}, null, null, args) { }
 		
 		public ExtendedMessage (List<string> input, List<string> output, params string[] args)
+			: this(new string[] {}, input, output, args) { }
+		
+		public ExtendedMessage (string[] cliArgs, List<string> input, List<string> output, params string[] args)
+			: this(string.Join (" ", cliArgs), input, output, args) { }
+		
+		public ExtendedMessage (string cliArgs, List<string> input, List<string> output, params string[] args)
 		{
+			this.Arguments = cliArgs;
 			this.Input = input;
 			this.Output = output;
 			this.Messages = new List<string>(args);
