@@ -22,10 +22,9 @@ namespace AssignmentTests
 				lines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
 				Assert.AreEqual (1, lines.Count, "Unexpected number of lines in output");
 				
-				List<string> input = TestHelper.ExtractResourceToLineArray(resource);
 				Regex firstLineRegex = new Regex("^[Rr]ange.*: .*$");
 				Assert.IsTrue (firstLineRegex.Matches(lines[0]).Count > 0, 
-				               new ExtendedMessage(input, lines, "First line of text did not match"));
+				               this.Runner.ExtendedMessage ().WithMessage ("First line of text did not match"));
 			}
 		}
 		
@@ -39,7 +38,7 @@ namespace AssignmentTests
 				
 				List<String> lines = this.Runner.GetOutputLines ();
 				lines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
-				Assert.AreEqual (5, lines.Count, "Unexpected number of lines in output");
+				Assert.AreEqual (5, lines.Count, this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of lines in output"));
 				
 				// TODO match the output more closely
 			}
