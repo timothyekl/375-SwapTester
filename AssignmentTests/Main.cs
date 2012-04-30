@@ -7,8 +7,12 @@ namespace AssignmentTests
 {
 	class MainClass
 	{
+		public static readonly string VERSION = "Swap3-pre1"; 
+		
 		public static void Main (string[] args)
 		{
+			System.Console.WriteLine ("Launching swap tester version: " + VERSION);
+			
 			// gah! ugly
 			char type = 'x';
 			int number = -1;
