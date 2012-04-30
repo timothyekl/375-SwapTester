@@ -8,18 +8,28 @@ namespace AssignmentTests
 {
 	public class TestHelper
 	{
-		public static TempFileWrapper ExtractResourceToTempFile (string resourceName) {
+		public static TempFileWrapper ExtractResourceToTempFile (string resourceName)
+		{
+			return ExtractResourceToTempFileWithName (resourceName, Path.GetTempFileName ());
+		}
+		
+		public static TempFileWrapper ExtractResourceToTempFileWithName (string resourceName, string targetName)
+		{
+			return ExtractResourceToTempFileWithPath (resourceName, Path.GetTempPath () + targetName);
+		}
+		
+		public static TempFileWrapper ExtractResourceToTempFileWithPath (string resourceName, string targetPath)
+		{
 			Assembly assembly = Assembly.GetExecutingAssembly();
 			Stream resourceStream = assembly.GetManifestResourceStream(resourceName);
 			StreamReader reader = new StreamReader(resourceStream);
 			
-			string tempFileName = Path.GetTempFileName ();
-			using(FileStream tempWriteStream = File.Open(tempFileName, FileMode.Open)) {
+			using(FileStream tempWriteStream = File.Open(targetPath, FileMode.OpenOrCreate)) {
 				Byte[] text = new UTF8Encoding(true).GetBytes(reader.ReadToEnd());
 				tempWriteStream.Write(text, 0, text.Length);
 			}
 			
-			return new TempFileWrapper(tempFileName);
+			return new TempFileWrapper(targetPath);
 		}
 		
 		public static List<string> ExtractResourceToLineArray (string resourceName) {
@@ -54,18 +64,18 @@ namespace AssignmentTests
 	
 	public class TempFileWrapper : IDisposable
 	{
-		public string Name {get; private set;}
+		public string Path {get; private set;}
 		
-		public TempFileWrapper(string name) {
-			this.Name = name;
+		public TempFileWrapper(string path) {
+			this.Path = path;
 		}
 		
 		void IDisposable.Dispose() {
-			File.Delete(this.Name);
+			File.Delete(this.Path);
 		}
 		
 		public override string ToString() {
-			return this.Name;
+			return this.Path;
 		}
 		
 		public static implicit operator string(TempFileWrapper t) {
