@@ -21,11 +21,12 @@ namespace AssignmentTests
 		public void TestBatchLoad ()
 		{
 			string resource = "AssignmentTests.Resources.r1-full.in";
+			string targetName = "test range.txt";
 			// Use the R1 input file multiple times
 			// The temp file wrapper semantics will give different range names
-			using(TempFileWrapper tempFile1 = TestHelper.ExtractResourceToTempFile (resource),
-			      tempFile2 = TestHelper.ExtractResourceToTempFile (resource),
-			      tempFile3 = TestHelper.ExtractResourceToTempFile (resource))
+			using(TempFileWrapper tempFile1 = TestHelper.ExtractResourceToTempFileWithName (resource, targetName),
+			      tempFile2 = TestHelper.ExtractResourceToTempFileWithName (resource, targetName),
+			      tempFile3 = TestHelper.ExtractResourceToTempFileWithName (resource, targetName))
 			{
 				this.Runner.StartApp (new string[] {tempFile1, tempFile2, tempFile3});
 				this.Runner.WriteInputLine ("");
@@ -43,9 +44,8 @@ namespace AssignmentTests
 		[Test()]
 		public void TestFileOutput ()
 		{
-			string resource = "AssignmentTests.Resources.r1-full.in";
 			using(TempFileWrapper outFile = new TempFileWrapper(Path.GetTempFileName ()),
-			      inFile = TestHelper.ExtractResourceToTempFile (resource))
+			      inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r1-full.in", "test range.txt"))
 			{
 				this.Runner.StartApp (new string[] {"-output", outFile, inFile});
 				
@@ -81,9 +81,10 @@ namespace AssignmentTests
 		public void TestFileOutputWithBatch ()
 		{
 			string resource = "AssignmentTests.Resources.r1-full.in";
+			string targetName = "test range.txt";
 			using(TempFileWrapper outFile = new TempFileWrapper(Path.GetTempFileName ()),
-			      inFile = TestHelper.ExtractResourceToTempFile (resource),
-			      inFile2 = TestHelper.ExtractResourceToTempFile (resource))
+			      inFile = TestHelper.ExtractResourceToTempFileWithName (resource, targetName),
+			      inFile2 = TestHelper.ExtractResourceToTempFileWithName (resource, targetName))
 			{
 				this.Runner.StartApp (new string[] {"-output", outFile, inFile, inFile2});
 				
@@ -118,8 +119,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestNegativeRanges ()
 		{
-			string resource = "AssignmentTests.Resources.r2-negative.in";
-			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile (resource))
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r2-negative.in", "negative range.txt"))
 			{
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine ("");
@@ -141,8 +141,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestExtraValues ()
 		{
-			string resource = "AssignmentTests.Resources.r2-extra.in";
-			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile (resource))
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r2-extra.in", "extra value range.txt"))
 			{
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine ("");
@@ -164,8 +163,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestErrors ()
 		{
-			string resource = "AssignmentTests.Resources.r2-error.in";
-			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile (resource))
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r2-error.in", "error range.txt"))
 			{
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine ("");

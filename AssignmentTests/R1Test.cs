@@ -12,8 +12,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestEmpty ()
 		{
-			string resource = "AssignmentTests.Resources.empty.txt";
-			using(TempFileWrapper tempFile = TestHelper.ExtractResourceToTempFile (resource)) {
+			using(TempFileWrapper tempFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.empty.txt", "empty range.txt")) {
 				this.Runner.StartApp (new string[] {tempFile});
 				
 				this.Runner.WriteInputLine ("");
@@ -31,7 +30,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestFull ()
 		{
-			using(TempFileWrapper tempFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.r1-full.in")) {
+			using(TempFileWrapper tempFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r1-full.in", "test range.txt")) {
 				this.Runner.StartApp (new string[] {tempFile});
 				
 				this.Runner.WriteInputLine ("");

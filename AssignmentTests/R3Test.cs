@@ -12,8 +12,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestUniqueNames ()
 		{
-			string resource = "AssignmentTests.Resources.r3-samename.in";
-			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile(resource))
+			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r3-samename.in", "same name range.txt"))
 			{
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine("");
