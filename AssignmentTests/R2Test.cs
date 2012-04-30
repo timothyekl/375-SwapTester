@@ -59,7 +59,7 @@ namespace AssignmentTests
 				
 				Assert.AreEqual (0, total, this.Runner.ExtendedMessage ().WithMessages ("Program provided unexpected output", "All output should be to file"));
 				
-				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open))
+				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open, FileAccess.Read, FileShare.Read))
 				{
 					StreamReader reader = new StreamReader(outputReadStream);
 					List<string> fileLines = new List<string>();
@@ -97,7 +97,7 @@ namespace AssignmentTests
 				
 				Assert.AreEqual (0, total, this.Runner.ExtendedMessage ().WithMessages ("Program provided unexpected output", "All output should be to file"));
 				
-				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open))
+				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open, FileAccess.Read, FileShare.Read))
 				{
 					StreamReader reader = new StreamReader(outputReadStream);
 					List<string> fileLines = new List<string>();
