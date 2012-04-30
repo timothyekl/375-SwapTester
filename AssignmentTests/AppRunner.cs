@@ -3,6 +3,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Timers;
 
 namespace AssignmentTests
@@ -140,6 +141,12 @@ namespace AssignmentTests
 		
 		private void AppTimeoutHandler(object sender, EventArgs e) {
 			this.KillApp();
+		}
+		
+		// Reflection helpers
+		public Assembly LoadApplicationAssembly ()
+		{
+			return Assembly.LoadFrom (this.ApplicationName);
 		}
 	}
 }
