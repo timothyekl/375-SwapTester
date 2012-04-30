@@ -51,6 +51,7 @@
     <Compile Include="T1Test.cs" />
     <Compile Include="T2Test.cs" />
     <Compile Include="ExtendedMessage.cs" />
+    <Compile Include="R3Test.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -66,6 +67,7 @@
     <EmbeddedResource Include="Resources\t1.in" />
     <EmbeddedResource Include="Resources\t2-frmarm.in" />
     <EmbeddedResource Include="Resources\t2-errors.in" />
+    <EmbeddedResource Include="Resources\r3-samename.in" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\t1.out" />
