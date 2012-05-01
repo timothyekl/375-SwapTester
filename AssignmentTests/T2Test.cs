@@ -12,20 +12,18 @@ namespace AssignmentTests
 		[Test()]
 		public void TestBatchLoad ()
 		{
-			string resource = "AssignmentTests.Resources.t1.in";
 			// Use the T1 input file multiple times
 			// The temp file wrapper semantics will give different range names
-			using(TempFileWrapper tempFile1 = TestHelper.ExtractResourceToTempFile (resource),
-			      tempFile2 = TestHelper.ExtractResourceToTempFile (resource),
-			      tempFile3 = TestHelper.ExtractResourceToTempFile (resource))
+			using(TempFileWrapper tempFile1 = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.t1.in"),
+			      tempFile2 = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.t2-frmarm.in"))
 			{
-				this.Runner.StartApp (new string[] {tempFile1, tempFile2, tempFile3});
+				this.Runner.StartApp (new string[] {tempFile1, tempFile2});
 				this.Runner.WriteInputLine ("");
 				
 				List<String> lines = this.Runner.GetOutputLines ();
 				lines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
 				
-				Assert.AreEqual (7 * 9, lines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected number of lines in output", "Note: This test should produce no loan errors"));
+				Assert.AreEqual (7 * (3 + 2), lines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected number of lines in output", "Note: This test should produce no loan errors"));
 			}
 		}
 		
@@ -62,12 +60,11 @@ namespace AssignmentTests
 		[Test()]
 		public void TestFileOutputWithBatchLoad ()
 		{
-			string resource = "AssignmentTests.Resources.t1.in";
 			// Use the T1 input file multiple times
 			// The temp file wrapper semantics will give different range names
 			using(TempFileWrapper outFile = new TempFileWrapper(Path.GetTempFileName ()),
-			      inFile = TestHelper.ExtractResourceToTempFile (resource),
-			      inFile2 = TestHelper.ExtractResourceToTempFile (resource))
+			      inFile = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.t1.in"),
+			      inFile2 = TestHelper.ExtractResourceToTempFile ("AssignmentTests.Resources.t2-frmarm.in"))
 			{
 				this.Runner.StartApp (new string[] {"-output", outFile, inFile, inFile2});
 				this.Runner.WriteInputLine ("");
@@ -88,7 +85,7 @@ namespace AssignmentTests
 					
 					fileLines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
 					
-					Assert.AreEqual (6 * 7, fileLines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected number of lines in output file", "Note: this test should produce no loan errors"));
+					Assert.AreEqual ((3 + 2) * 7, fileLines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected number of lines in output file", "Note: this test should produce no loan errors"));
 				}
 			}
 		}
