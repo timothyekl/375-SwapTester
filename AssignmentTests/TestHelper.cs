@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AssignmentTests
 {
@@ -59,6 +60,15 @@ namespace AssignmentTests
 				}
 			}
 			return argStr;
+		}
+		
+		public static Type LoadTypeFromAssembly (string typeName, Assembly assembly)
+		{
+			Type type = null;
+			type = assembly.GetType (typeName);
+			if(type == null) type = assembly.GetType (assembly.GetName ().Name + "." + typeName);
+			if(type == null) type = assembly.GetType ((new List<Type> (assembly.GetTypes ()).ConvertAll<string> ((Type t) => t.FullName)).Find ((string s) => new Regex(typeName + "$").IsMatch (s)));
+			return type;
 		}
 	}
 	

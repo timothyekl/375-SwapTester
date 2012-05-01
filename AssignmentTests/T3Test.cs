@@ -43,15 +43,7 @@ namespace AssignmentTests
 				string expectedInterfaceName = kvp.Key;
 				List<string> expectedInterfaceMethods = kvp.Value;
 				
-				Type type = null;
-				try
-				{
-					type = appAssembly.GetType (appAssembly.GetName ().Name + "." + expectedInterfaceName);
-				}
-				catch (Exception)
-				{
-					Assert.Fail ("Test failed to load type " + expectedInterfaceName);
-				}
+				Type type = TestHelper.LoadTypeFromAssembly (expectedInterfaceName, appAssembly);
 				Assert.IsNotNull (type, "Test loaded null type for name " + expectedInterfaceName);
 				
 				List<string> propertyNames;
