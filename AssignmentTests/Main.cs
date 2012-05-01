@@ -9,6 +9,8 @@ namespace AssignmentTests
 	{
 		public static readonly string VERSION = "Swap3-pre2"; 
 		
+		public static readonly Int16 ASSIGNMENT = 3;
+		
 		public static void Main (string[] args)
 		{
 			System.Console.WriteLine ("Launching swap tester version: " + VERSION);
@@ -38,7 +40,7 @@ namespace AssignmentTests
 			string runString = "";
 			if(number == 0) {
 				List<string> packageStrings = new List<string>();
-				for(int i = 1; i <= 2; i++) {
+				for(int i = 1; i <= ASSIGNMENT; i++) {
 					packageStrings.Add("AssignmentTests." + type + i + "Test");
 				}
 				runString = String.Join(",", packageStrings.ToArray());
