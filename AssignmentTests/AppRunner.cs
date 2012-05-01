@@ -118,7 +118,7 @@ namespace AssignmentTests
 		}
 		
 		public ExtendedMessage ExtendedMessage () {
-			return _extendedMessage;
+			return (ExtendedMessage) (_extendedMessage.Clone ());
 		}
 		
 		// Configuration for system process execution

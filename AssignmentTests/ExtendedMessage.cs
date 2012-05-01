@@ -4,7 +4,7 @@ using System.IO;
 
 namespace AssignmentTests
 {
-	public class ExtendedMessage
+	public class ExtendedMessage : ICloneable
 	{
 		public List<string> Input {get; set;}
 		public List<string> Output {get; set;}
@@ -96,6 +96,11 @@ namespace AssignmentTests
 		
 		public static implicit operator string(ExtendedMessage em) {
 			return em.ToString ();
+		}
+		
+		public object Clone ()
+		{
+			return new ExtendedMessage (this.Arguments, this.Input, this.Output, this.Messages.ToArray ());
 		}
 	}
 }
