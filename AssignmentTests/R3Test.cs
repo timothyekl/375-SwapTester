@@ -32,9 +32,6 @@ namespace AssignmentTests
 		{
 			Assembly appAssembly = this.Runner.LoadApplicationAssembly ();
 			
-			List<Type> appTypes = new List<Type> (appAssembly.GetTypes ());
-			List<string> typeNames = appTypes.ConvertAll<string> ((Type t) => t.Name);
-			
 			Dictionary<string, List<string>> expectedInterfaces = new Dictionary<string, List<string>> ();
 			expectedInterfaces.Add ("IRange", new List<string> () {"Name", "Top", "Bottom", "ExtraValue", "ThisNumberFitsInThisRange"});
 			expectedInterfaces.Add ("IRangeSet", new List<string> () {"Name", "Ranges", "Errors", "WhichRangeDoesThisNumberFitIn"});
@@ -44,17 +41,26 @@ namespace AssignmentTests
 				string expectedInterfaceName = kvp.Key;
 				List<string> expectedInterfaceMethods = kvp.Value;
 				
-				Assert.IsTrue (typeNames.Contains (expectedInterfaceName), "Program does not contain the type " + expectedInterfaceName);
+				Type type = null;
+				try
+				{
+					type = appAssembly.GetType (appAssembly.GetName ().Name + "." + expectedInterfaceName);
+				}
+				catch (Exception)
+				{
+					Assert.Fail ("Test failed to load type " + expectedInterfaceName);
+				}
+				Assert.IsNotNull (type, "Test loaded null type for name " + expectedInterfaceName);
 				
-				Type type = appAssembly.GetType (expectedInterfaceName);
 				Assert.IsTrue (type.IsInterface, "Type " + type.Name + " is not an interface type");
 				
-				MethodInfo[] typeMethods = type.GetMethods ();
-				List<string> typeMethodNames = (new List<MethodInfo> (typeMethods)).ConvertAll<string> ((MethodInfo mi) => mi.Name);
+				List<string> propertyNames = new List<string> ();
+				propertyNames.AddRange ((new List<PropertyInfo> (type.GetProperties ())).ConvertAll<string> ((PropertyInfo pi) => pi.Name));
+				propertyNames.AddRange ((new List<MethodInfo> (type.GetMethods ())).ConvertAll<string> ((MethodInfo mi) => mi.Name));
 				
 				foreach(string expectedMethodName in expectedInterfaceMethods)
 				{
-					Assert.IsTrue (typeMethodNames.Contains (expectedMethodName), "Type " + type.Name + " does not have method with name " + expectedMethodName);
+					Assert.IsTrue (propertyNames.Contains (expectedMethodName), "Type " + type.Name + " does not have method with name " + expectedMethodName);
 				}
 			}
 		}
