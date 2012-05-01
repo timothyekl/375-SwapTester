@@ -37,9 +37,6 @@ namespace AssignmentTests
 				Assert.Inconclusive ("Could not load application assembly\nPlease verify interfaces manually");
 			}
 			
-			List<Type> appTypes = new List<Type> (appAssembly.GetTypes ());
-			List<string> typeNames = appTypes.ConvertAll<string> ((Type t) => t.AssemblyQualifiedName);
-			
 			Dictionary<string, List<string>> expectedInterfaces = new Dictionary<string, List<string>> ();
 			expectedInterfaces.Add ("LoanType", new List<string> () {"FRM", "ARM"});
 			expectedInterfaces.Add ("ITransaction", new List<string> () {"Name", "Type", "FaceValue", "CurrentFace", "IssueDate", "MaturityDate", "CouponRate", "MarginRate", "PrepayRate", "CreditRating"});
@@ -65,8 +62,9 @@ namespace AssignmentTests
 				{
 					Assert.IsTrue (type.IsInterface, "Type " + type.Name + " is not an interface type");
 					
-					MethodInfo[] typeMethods = type.GetMethods ();
-					propertyNames = (new List<MethodInfo> (typeMethods)).ConvertAll<string> ((MethodInfo mi) => mi.Name);
+					propertyNames = new List<string> ();
+					propertyNames.AddRange ((new List<PropertyInfo> (type.GetProperties ())).ConvertAll<string> ((PropertyInfo pi) => pi.Name));
+					propertyNames.AddRange ((new List<MethodInfo> (type.GetMethods ())).ConvertAll<string> ((MethodInfo mi) => mi.Name));
 				}
 				else
 				{
