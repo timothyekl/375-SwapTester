@@ -32,9 +32,13 @@ namespace AssignmentTests
 		public void TestInterfaceExistence ()
 		{
 			Assembly appAssembly = this.Runner.LoadApplicationAssembly ();
+			if(appAssembly == null)
+			{
+				Assert.Inconclusive ("Could not load application assembly\nPlease verify interfaces manually");
+			}
 			
 			List<Type> appTypes = new List<Type> (appAssembly.GetTypes ());
-			List<string> typeNames = appTypes.ConvertAll<string> ((Type t) => t.Name);
+			List<string> typeNames = appTypes.ConvertAll<string> ((Type t) => t.AssemblyQualifiedName);
 			
 			Dictionary<string, List<string>> expectedInterfaces = new Dictionary<string, List<string>> ();
 			expectedInterfaces.Add ("LoanType", new List<string> () {"FRM", "ARM"});
@@ -45,20 +49,28 @@ namespace AssignmentTests
 				string expectedInterfaceName = kvp.Key;
 				List<string> expectedInterfaceMethods = kvp.Value;
 				
-				Assert.IsTrue (typeNames.Contains (expectedInterfaceName), "Program does not contain the type " + expectedInterfaceName);
-				
-				Type type = appAssembly.GetType (expectedInterfaceName);
-				List<string> propertyNames;
-				if(expectedInterfaceName.Equals ("LoanType"))
+				Type type = null;
+				try
 				{
-					Assert.IsTrue (type.IsEnum, "Type " + type.Name + " is not an enum type");
+					type = appAssembly.GetType (appAssembly.GetName ().Name + "." + expectedInterfaceName);
+				}
+				catch (Exception)
+				{
+					Assert.Fail ("Test failed to load type " + expectedInterfaceName);
+				}
+				Assert.IsNotNull (type, "Test loaded null type for name " + expectedInterfaceName);
+				
+				List<string> propertyNames;
+				if(!expectedInterfaceName.Equals ("LoanType"))
+				{
+					Assert.IsTrue (type.IsInterface, "Type " + type.Name + " is not an interface type");
 					
 					MethodInfo[] typeMethods = type.GetMethods ();
 					propertyNames = (new List<MethodInfo> (typeMethods)).ConvertAll<string> ((MethodInfo mi) => mi.Name);
 				}
 				else
 				{
-					Assert.IsTrue (type.IsInterface, "Type " + type.Name + " is not an interface type");
+					Assert.IsTrue (type.IsEnum, "Type " + type.Name + " is not an enum type");
 					
 					propertyNames = new List<string> (Enum.GetNames (type));
 				}

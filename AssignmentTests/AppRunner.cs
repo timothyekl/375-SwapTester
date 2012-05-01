@@ -146,7 +146,14 @@ namespace AssignmentTests
 		// Reflection helpers
 		public Assembly LoadApplicationAssembly ()
 		{
-			return Assembly.LoadFrom (this.ApplicationName);
+			try
+			{
+				return Assembly.LoadFrom (this.ApplicationName);
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 	}
 }
