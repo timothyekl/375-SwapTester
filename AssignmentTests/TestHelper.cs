@@ -10,7 +10,7 @@ namespace AssignmentTests
 	{
 		public static TempFileWrapper ExtractResourceToTempFile (string resourceName)
 		{
-			return ExtractResourceToTempFileWithName (resourceName, Path.GetTempFileName ());
+			return ExtractResourceToTempFileWithPath (resourceName, Path.GetTempFileName ());
 		}
 		
 		public static TempFileWrapper ExtractResourceToTempFileWithName (string resourceName, string targetName)
