@@ -12,7 +12,7 @@ namespace AssignmentTests
 		[Test()]
 		public void TestUniqueNames ()
 		{
-			string resource = "AssignmentTests.Resources.r3-samename.in";
+			string resource = "AssignmentTests.Resources.t3-samename.in";
 			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile(resource))
 			{
 				this.Runner.StartApp (new string[] {inFile});
@@ -22,9 +22,6 @@ namespace AssignmentTests
 				
 				List<string> errorLines = lines.FindAll ((string s) => (new Regex("^[Ee]rror")).IsMatch (s));
 				Assert.AreEqual (1, errorLines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected number of errors detected in file", "This test should detect exactly one error"));
-				
-				List<string> nameLines = lines.FindAll ((string s) => (new Regex("Same Name")).IsMatch (s));
-				Assert.AreEqual (1, nameLines.Count, this.Runner.ExtendedMessage ().WithMessages ("No indication of duplicate name", "Program should identify name of duplicate record in file"));
 			}
 		}
 		
