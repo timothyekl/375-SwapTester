@@ -23,7 +23,8 @@ namespace AssignmentTests
 				List<String> lines = this.Runner.GetOutputLines ();
 				lines.RemoveAll ((string s) => (new Regex("^\\s*$")).IsMatch (s));
 				
-				Assert.AreEqual (7 * (3 + 2), lines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected number of lines in output", "Note: This test should produce no loan errors"));
+				// 7 * (3 + 2) + 1 == seven lines for each transaction, three transactions in first file, two in second, one bonus line for margin amount
+				Assert.AreEqual (7 * (3 + 2) + 1, lines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected number of lines in output", "Note: This test should produce no loan errors"));
 			}
 		}
 		
