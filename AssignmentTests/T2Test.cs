@@ -123,7 +123,7 @@ namespace AssignmentTests
 				
 				Assert.AreEqual (11, lines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected number of lines in output", "Note: this test should find exactly two loan errors"));
 				
-				List<string> errorLines = lines.FindAll ((string s) => (new Regex("^Error.*ABC123")).IsMatch (s));
+				List<string> errorLines = lines.FindAll ((string s) => (new Regex("^Error.*ABC")).IsMatch (s));
 				Assert.AreEqual (2, errorLines.Count, this.Runner.ExtendedMessage ().WithMessage ("Wrong number of errors detected"));
 				foreach (string errorLine in errorLines) {
 					Int32 idx = lines.IndexOf(errorLine) + 1;
