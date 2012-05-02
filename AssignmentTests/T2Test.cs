@@ -41,7 +41,7 @@ namespace AssignmentTests
 				
 				Assert.AreEqual (0, lines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected output on console", "Expected all output to file"));
 			
-				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open))
+				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open, FileAccess.Read, FileShare.Read))
 				{
 					StreamReader reader = new StreamReader(outputReadStream);
 					List<string> fileLines = new List<string>();
@@ -74,7 +74,7 @@ namespace AssignmentTests
 				
 				Assert.AreEqual (0, lines.Count, this.Runner.ExtendedMessage ().WithMessages ("Unexpected output on console", "Expected all output to file"));
 				
-				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open))
+				using(FileStream outputReadStream = File.Open(outFile, FileMode.Open, FileAccess.Read, FileShare.Read))
 				{
 					StreamReader reader = new StreamReader(outputReadStream);
 					List<string> fileLines = new List<string>();
