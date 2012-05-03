@@ -38,6 +38,7 @@
     <Reference Include="nunit-console-runner">
       <HintPath>..\..\..\..\..\Library\NUnit\NUnit-2.6.0.12051\bin\lib\nunit-console-runner.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -72,5 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\t1.out" />
+    <None Include="Resources\r3-csv.in" />
   </ItemGroup>
 </Project>

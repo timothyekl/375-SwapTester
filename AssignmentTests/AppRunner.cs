@@ -100,7 +100,7 @@ namespace AssignmentTests
 			_process.StandardInput.WriteLine (line);
 			_process.StandardInput.Flush ();
 			
-			_extendedMessage.Input.Add (line);
+			_extendedMessage.WithInputLine (line);
 		}
 		
 		public List<String> GetOutputLines () {
@@ -112,7 +112,7 @@ namespace AssignmentTests
 				lines.Add (line);
 			}
 			
-			_extendedMessage.Output.AddRange (lines);
+			_extendedMessage.WithOutputLines (lines);
 			
 			return lines;
 		}

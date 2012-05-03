@@ -70,6 +70,38 @@ namespace AssignmentTests
 			if(type == null) type = assembly.GetType ((new List<Type> (assembly.GetTypes ()).ConvertAll<string> ((Type t) => t.FullName)).Find ((string s) => new Regex(typeName + "$").IsMatch (s)));
 			return type;
 		}
+		
+		public static Type LoadImplementationOfTypeFromAssembly (string interfaceName, Assembly assembly)
+		{
+			Type interfaceType = LoadTypeFromAssembly (interfaceName, assembly);
+			
+			List<Type> implementingTypes = new List<Type> (assembly.GetTypes ())
+											.FindAll ((Type t) => t.IsClass)
+											.FindAll ((Type t) => (new List<Type> (t.GetInterfaces ())).Contains (interfaceType));
+			
+			if (implementingTypes.Count == 1)
+			{
+				return implementingTypes[0];
+			}
+			else
+			{
+				throw new Exception ("Multiple implementations of interface type " + interfaceName);
+				// TODO this may need to get smarter, if people do strange things with subclassing/factories
+			}
+		}
+		
+		public static dynamic CreateInstanceOfImplementationOfTypeFromAssembly (string interfaceName, Assembly assembly)
+		{
+			Type implementationType = LoadImplementationOfTypeFromAssembly (interfaceName, assembly);
+			
+			ConstructorInfo ctor = implementationType.GetConstructor (new Type[] {});
+			if (ctor == null) {
+				throw new Exception ("No constructor for implementation of type " + interfaceName + " with no arguments");
+			}
+			
+			dynamic obj = ctor.Invoke (new Object[] {});
+			return obj;
+		}
 	}
 	
 	public class TempFileWrapper : IDisposable

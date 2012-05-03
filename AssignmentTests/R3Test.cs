@@ -1,3 +1,4 @@
+using Microsoft.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -54,6 +55,39 @@ namespace AssignmentTests
 				{
 					Assert.IsTrue (propertyNames.Contains (expectedMethodName), "Type " + type.Name + " does not have method with name " + expectedMethodName);
 				}
+			}
+		}
+		
+		[Test()]
+		public void TestLoadingViaInterface ()
+		{
+			Assembly appAssembly = this.Runner.LoadApplicationAssembly ();
+			
+			dynamic loader = null;
+			try {
+				loader = TestHelper.CreateInstanceOfImplementationOfTypeFromAssembly ("IRangeLoader", appAssembly);
+			} catch (Exception e) {
+				Assert.Ignore ("Failed to find implementation of IRangeLoader:\n" + e.Message);
+			}
+			
+			/*
+			System.Console.WriteLine ("TEST: loader is " + loader.ToString ());
+			FieldInfo fi = loader.GetType ().GetField("_fileProcessor", BindingFlags.Instance | BindingFlags.NonPublic);
+			dynamic processor = fi.GetValue(loader);
+			dynamic storage = processor.GetStorage ();
+			System.Console.WriteLine ("TEST: loader's processor's storage is " + storage.ToString ());
+			*/
+			
+			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r1-full.in", "sample range.txt")) {
+				dynamic rangeSet = loader.GetRangeSetFromFile (inFile.ToString ());
+				
+				Assert.IsNotNull (rangeSet, "IRangeLoader implementation did not load range set properly");
+				Assert.AreEqual ("sample", rangeSet.Name, "Loaded range set name is inaccurate");
+				Assert.AreEqual (4, (new List<Object> (rangeSet.Ranges)).Count, "Loaded range set has wrong number of ranges");
+				Assert.AreEqual (0, rangeSet.Errors.Count, "Loaded range set wrongly detected an error");
+				Assert.AreEqual ("Stud Credit", rangeSet.WhichRangeDoesThisNumberFitIn (840).Name, "Loaded range set provided wrong range name for value 840");
+				
+				System.Console.WriteLine ("success");
 			}
 		}
 	}
