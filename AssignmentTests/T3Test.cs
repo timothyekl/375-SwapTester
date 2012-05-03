@@ -35,7 +35,7 @@ namespace AssignmentTests
 			}
 			
 			Dictionary<string, List<string>> expectedInterfaces = new Dictionary<string, List<string>> ();
-			expectedInterfaces.Add ("LoanType", new List<string> () {"FRM", "ARM"});
+			expectedInterfaces.Add ("LoanType", new List<string> () {"NONE", "FRM", "ARM"});
 			expectedInterfaces.Add ("ITransaction", new List<string> () {"Name", "Type", "FaceValue", "CurrentFace", "IssueDate", "MaturityDate", "CouponRate", "MarginRate", "PrepayRate", "CreditRating"});
 			expectedInterfaces.Add ("ITransactionLoader", new List<string> () {"GetTransactionsFromFiles", "GetTransactionsFromText"});
 			foreach(KeyValuePair<string, List<string>> kvp in expectedInterfaces)
