@@ -75,6 +75,7 @@
     <EmbeddedResource Include="Resources\r3-incexc.in" />
     <EmbeddedResource Include="Resources\r3-incexcerror.in" />
     <EmbeddedResource Include="Resources\t3-zeroerror.in" />
+    <EmbeddedResource Include="Resources\t3-creditrisk.in" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\t1.out" />

@@ -1,0 +1,4 @@
+#FRM and ARM loans with credit values and enum values instead of FRM/ARM
+ABC123, FRM, 500000, 100000, 4/9/1992, 4/9/2022, 5.25, .01, 780
+ANARM, ARM, 400000, 300000, 4/9/2012, 4/9/2042, 4.25, .5, .05, 600
+NEWARM, ARM, 400000, 300000, 4/9/2012, 4/9/2042, 4.25, .5
