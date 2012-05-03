@@ -7,7 +7,7 @@ namespace AssignmentTests
 {
 	class MainClass
 	{
-		public static readonly string VERSION = "Swap3-pre3"; 
+		public static readonly string VERSION = "Swap3-release"; 
 		
 		public static readonly Int16 ASSIGNMENT = 3;
 		
