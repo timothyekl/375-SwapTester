@@ -71,9 +71,11 @@
     <EmbeddedResource Include="Resources\t2-errors.in" />
     <EmbeddedResource Include="Resources\r3-samename.in" />
     <EmbeddedResource Include="Resources\t3-samename.in" />
+    <EmbeddedResource Include="Resources\r3-csv.in" />
+    <EmbeddedResource Include="Resources\r3-incexc.in" />
+    <EmbeddedResource Include="Resources\r3-incexcerror.in" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\t1.out" />
-    <None Include="Resources\r3-csv.in" />
   </ItemGroup>
 </Project>

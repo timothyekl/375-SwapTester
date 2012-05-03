@@ -11,7 +11,7 @@ namespace AssignmentTests
 		public Dictionary<R2OutputLineType,List<string>> CategorizeLines (List<string> lines)
 		{
 			Regex headerRegex = new Regex("^Range");
-			Regex rangeRegex = new Regex("^\\[(-?[0-9]*)-(-?[0-9]*)\\)");
+			Regex rangeRegex = new Regex("^[\\[\\(](-?[0-9]*)-(-?[0-9]*)[\\]\\)]");
 			Regex whitespaceRegex = new Regex("^\\s*$");
 			Regex errorRegex = new Regex("^Error in file$");
 			

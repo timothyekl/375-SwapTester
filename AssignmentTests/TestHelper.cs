@@ -94,6 +94,9 @@ namespace AssignmentTests
 		{
 			Type implementationType = LoadImplementationOfTypeFromAssembly (interfaceName, assembly);
 			
+			return Activator.CreateInstance (implementationType);
+			
+			/*
 			ConstructorInfo ctor = implementationType.GetConstructor (new Type[] {});
 			if (ctor == null) {
 				throw new Exception ("No constructor for implementation of type " + interfaceName + " with no arguments");
@@ -101,6 +104,7 @@ namespace AssignmentTests
 			
 			dynamic obj = ctor.Invoke (new Object[] {});
 			return obj;
+			*/
 		}
 	}
 	

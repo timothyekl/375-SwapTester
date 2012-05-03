@@ -99,7 +99,56 @@ namespace AssignmentTests
 				this.Runner.StartApp (new string[] {inFile});
 				this.Runner.WriteInputLine("");
 				
+				List<string> lines = this.Runner.GetOutputLines ();
+				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
 				
+				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, 
+				                 this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of header lines printed"));
+				Assert.AreEqual (4, categorizedLines[R2OutputLineType.Range].Count,
+				                 this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of range lines printed"));
+			}
+		}
+		
+		[Test()]
+		public void TestLoadingInclusiveExclusive ()
+		{
+			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r3-incexc.in", "sample range.csv"))
+			{
+				this.Runner.StartApp (new string[] {inFile});
+				this.Runner.WriteInputLine("");
+				
+				List<string> lines = this.Runner.GetOutputLines ();
+				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
+				
+				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Header].Count, 
+				                 this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of header lines printed"));
+				Assert.AreEqual (4, categorizedLines[R2OutputLineType.Range].Count,
+				                 this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of range lines printed"));
+			}
+		}
+		
+		[Test()]
+		public void TestInclusiveExclusiveMembership ()
+		{
+			// Load r3-incexc.in via interfaces and assert membership at endpoints
+			Assert.Ignore ("Not implemented");
+		}
+		
+		[Test()]
+		public void TestInclusiveExclusiveErrors ()
+		{
+			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r3-incexcerror.in", "sample error range.csv"))
+			{
+				this.Runner.StartApp (new string[] {inFile});
+				this.Runner.WriteInputLine("");
+				
+				List<string> lines = this.Runner.GetOutputLines ();
+				Dictionary<R2OutputLineType,List<string>> categorizedLines = this.CategorizeLines (lines);
+				
+				Assert.GreaterOrEqual (categorizedLines[R2OutputLineType.Header].Count, 1,
+				                 this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of header lines printed"));
+				Assert.AreEqual (1, categorizedLines[R2OutputLineType.Error].Count,
+				                 this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of range lines printed"));
 			}
 		}
 	}
