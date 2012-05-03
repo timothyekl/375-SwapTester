@@ -152,7 +152,19 @@ namespace AssignmentTests
 		[Test()]
 		public void TestNewOutputFormat ()
 		{
-			Assert.Ignore ("Not implemented");
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile("AssignmentTests.Resources.t3-loantype.in")) {
+				this.Runner.StartApp(new string[] {"-csv", inFile});
+				this.Runner.WriteInputLine("");
+				
+				List<string> lines = this.Runner.GetOutputLines ();
+				
+				List<string> expectedLines = TestHelper.ExtractResourceToLineArray("AssignmentTests.Resources.t3-loantype-csv.out");
+				
+				Assert.AreEqual (expectedLines.Count, lines.Count, this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of lines in output"));
+				for(int i = 0; i < lines.Count; i++) {
+					Assert.AreEqual (expectedLines[i], lines[i], this.Runner.ExtendedMessage ().WithMessage ("Improper line in output"));
+				}
+			}
 		}
 		
 		[Test()]
