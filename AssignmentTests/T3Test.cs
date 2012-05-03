@@ -126,7 +126,27 @@ namespace AssignmentTests
 		[Test()]
 		public void TestLoanTypeParseFlexibility ()
 		{
-			Assert.Ignore ("Not implemented");
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile("AssignmentTests.Resources.t3-loantype.in")) {
+				this.Runner.StartApp(new string[] {inFile});
+				this.Runner.WriteInputLine("");
+				
+				List<string> lines = this.Runner.GetOutputLines ();
+				
+				foreach(KeyValuePair<string,string> kvp in 
+				       new Dictionary<string,string> {
+							{"margin", "[Mm]argin"}, 
+							{"credit rating", "[Cc]redit [Rr]at(?:ing|e)"}, 
+							{"prepay rate", "[Pp]repay [Rr]ate"},
+							{"ARM", "ARM"},
+							{"FRM", "FRM"}
+				}) {
+					string phrase = kvp.Key;
+					Regex regex = new Regex(kvp.Value);
+					
+					Assert.AreEqual (2, lines.FindAll ((string s) => regex.IsMatch (s)).Count, 
+					                 this.Runner.ExtendedMessage ().WithMessages ("Failed to parse " + phrase, "Expected exactly two transactions with " + phrase + "field"));
+				}
+			}
 		}
 		
 		[Test()]
