@@ -53,6 +53,7 @@
     <Compile Include="ExtendedMessage.cs" />
     <Compile Include="R3Test.cs" />
     <Compile Include="T3Test.cs" />
+    <Compile Include="RTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

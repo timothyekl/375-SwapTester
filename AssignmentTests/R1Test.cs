@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace AssignmentTests
 {
 	[TestFixture()]
-	public class R1Test : ATest
+	public class R1Test : RTest
 	{
 		[Test()]
 		public void TestEmpty ()

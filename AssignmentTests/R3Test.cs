@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace AssignmentTests
 {
 	[TestFixture()]
-	public class R3Test : ATest
+	public class R3Test : RTest
 	{
 		[Test()]
 		public void TestUniqueNames ()
@@ -88,6 +88,18 @@ namespace AssignmentTests
 				Assert.AreEqual ("Stud Credit", rangeSet.WhichRangeDoesThisNumberFitIn (840).Name, "Loaded range set provided wrong range name for value 840");
 				
 				System.Console.WriteLine ("success");
+			}
+		}
+		
+		[Test()]
+		public void TestLoadingFromCSV ()
+		{
+			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r3-csv.in", "sample range.csv"))
+			{
+				this.Runner.StartApp (new string[] {inFile});
+				this.Runner.WriteInputLine("");
+				
+				
 			}
 		}
 	}
