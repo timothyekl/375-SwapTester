@@ -23,6 +23,11 @@ namespace AssignmentTests
 		{
 			Assembly assembly = Assembly.GetExecutingAssembly();
 			Stream resourceStream = assembly.GetManifestResourceStream(resourceName);
+			
+			if(resourceStream == null) {
+				throw new Exception("BUG: The author forgot to set the resource " + resourceName + " to be embedded.");
+			}
+			
 			StreamReader reader = new StreamReader(resourceStream);
 			
 			using(FileStream tempWriteStream = File.Open(targetPath, FileMode.OpenOrCreate)) {

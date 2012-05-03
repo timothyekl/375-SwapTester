@@ -68,6 +68,60 @@ namespace AssignmentTests
 				}
 			}
 		}
+		
+		[Test()]
+		public void TestUsesShortDates ()
+		{
+			Assert.Ignore ("Not implemented");
+		}
+		
+		[Test()]
+		public void TestZeroErrors ()
+		{
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile("AssignmentTests.Resources.t3-zeroerror.in")) {
+				this.Runner.StartApp(new string[] {inFile});
+				this.Runner.WriteInputLine("");
+				
+				List<string> lines = this.Runner.GetOutputLines ();
+				
+				Assert.AreEqual (1, lines.FindAll ((string s) => (new Regex("[Ee]rror")).IsMatch (s)).Count,
+				                 this.Runner.ExtendedMessage ().WithMessages ("Incorrect number of error reports", "This test should report exactly one error"));
+				Assert.AreEqual (1, lines.FindAll ((string s) => (new Regex("ABC123")).IsMatch (s)).Count,
+				                 this.Runner.ExtendedMessage ().WithMessages ("Incomplete error report", "Error report should include failing loan's name"));
+				Assert.AreEqual (1, lines.FindAll ((string s) => (new Regex("(?:[Ff]ace )?[Vv]alue")).IsMatch (s)).Count,
+				                 this.Runner.ExtendedMessage ().WithMessages ("Incomplete error report", "Error report should include the phrase 'face value'"));
+			}
+		}
+		
+		[Test()]
+		public void TestCreditRiskParsing ()
+		{
+			Assert.Ignore ("Not implemented");
+		}
+		
+		[Test()]
+		public void TestValidatesCreditRisk ()
+		{
+			Assert.Ignore ("Not implemented");
+		}
+		
+		[Test()]
+		public void TestLoanTypeParseFlexibility ()
+		{
+			Assert.Ignore ("Not implemented");
+		}
+		
+		[Test()]
+		public void TestNewOutputFormat ()
+		{
+			Assert.Ignore ("Not implemented");
+		}
+		
+		[Test()]
+		public void TestNewOutputErrorFormat ()
+		{
+			Assert.Ignore ("Not implemented");
+		}
 	}
 }
 
