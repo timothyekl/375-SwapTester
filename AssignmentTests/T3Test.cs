@@ -218,6 +218,29 @@ namespace AssignmentTests
 				Assert.IsTrue ((new Regex("^[Ee]rror in loan[: ]+ABC123,(.*)$")).IsMatch (lines[0]), this.Runner.ExtendedMessage ().WithMessage ("Improper line in output"));
 			}
 		}
+		
+		[Test()]
+		public void TestLoadingViaInterface ()
+		{
+			Assembly appAssembly = this.Runner.LoadApplicationAssembly ();
+			
+			dynamic loader = null;
+			try {
+				loader = TestHelper.CreateInstanceOfImplementationOfTypeFromAssembly ("ITransactionLoader", appAssembly);
+			} catch (Exception e) {
+				Assert.Ignore ("Failed to find implementation of IRangeLoader:\n" + e.Message);
+			}
+			
+			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.t1.in", "sample range.txt")) {
+				dynamic transactions = loader.GetTransactionsFromFiles(new List<string> () {inFile.ToString()});
+				
+				Assert.AreEqual (3, transactions.Count, "Expected three transactions to load");
+				foreach(dynamic transaction in transactions) {
+					Assert.IsTrue ((new Regex("^[ABC]$")).IsMatch (transaction.Name), "Expected transaction name to be A, B, or C");
+					Assert.Fail (transaction.Name);
+				}
+			}
+		}
 	}
 }
 
