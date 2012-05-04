@@ -72,7 +72,28 @@ namespace AssignmentTests
 		[Test()]
 		public void TestUsesShortDates ()
 		{
-			Assert.Ignore ("Not implemented");
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile("AssignmentTests.Resources.t1.in")) {
+				this.Runner.StartApp(new string[] {inFile});
+				this.Runner.WriteInputLine("");
+				
+				List<string> lines = this.Runner.GetOutputLines ();
+				
+				Regex dateCandidateRegex = new Regex("^.*: (.*[0-9]+\\/[0-9]+\\/[0-9]+.*)$");
+				foreach (string line in lines) {
+					if (dateCandidateRegex.IsMatch (line)) {
+						string dateCandidate = dateCandidateRegex.Match (line).Groups[1].Value;
+						DateTime dt = DateTime.Parse (dateCandidate);
+						
+						Assert.AreNotEqual (0, dt.Day, this.Runner.ExtendedMessage ().WithMessage ("Expected value for date"));
+						Assert.AreNotEqual (0, dt.Month, this.Runner.ExtendedMessage ().WithMessage ("Expected value for month"));
+						Assert.AreNotEqual (0, dt.Year, this.Runner.ExtendedMessage ().WithMessage ("Expected value for year"));
+						
+						Assert.AreEqual (0, dt.Hour, this.Runner.ExtendedMessage ().WithMessage ("Expected zero value for hour"));
+						Assert.AreEqual (0, dt.Minute, this.Runner.ExtendedMessage ().WithMessage ("Expected zero value for minute"));
+						Assert.AreEqual (0, dt.Second, this.Runner.ExtendedMessage ().WithMessage ("Expected zero value for second"));
+					}
+				}
+			}
 		}
 		
 		[Test()]
@@ -157,6 +178,7 @@ namespace AssignmentTests
 				this.Runner.WriteInputLine("");
 				
 				List<string> lines = this.Runner.GetOutputLines ();
+				lines.RemoveAll((string s) => new Regex ("^\\s*$").IsMatch (s));
 				
 				List<string> expectedLines = TestHelper.ExtractResourceToLineArray("AssignmentTests.Resources.t3-loantype-csv.out");
 				
@@ -170,7 +192,16 @@ namespace AssignmentTests
 		[Test()]
 		public void TestNewOutputErrorFormat ()
 		{
-			Assert.Ignore ("Not implemented");
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile("AssignmentTests.Resources.t3-zeroerror.in")) {
+				this.Runner.StartApp(new string[] {"-csv", inFile});
+				this.Runner.WriteInputLine("");
+				
+				List<string> lines = this.Runner.GetOutputLines ();
+				lines.RemoveAll((string s) => new Regex ("^\\s*$").IsMatch (s));
+				
+				Assert.AreEqual (1, lines.Count, this.Runner.ExtendedMessage ().WithMessage ("Unexpected number of lines in output"));
+				Assert.IsTrue ((new Regex("^[Ee]rror in loan[: ]+ABC123,(.*)$")).IsMatch (lines[0]), this.Runner.ExtendedMessage ().WithMessage ("Improper line in output"));
+			}
 		}
 	}
 }
