@@ -78,6 +78,7 @@
     <EmbeddedResource Include="Resources\t3-creditrisk.in" />
     <EmbeddedResource Include="Resources\t3-loantype.in" />
     <EmbeddedResource Include="Resources\t3-loantype-csv.out" />
+    <EmbeddedResource Include="Resources\t3-creditvalueerror.in" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\t1.out" />

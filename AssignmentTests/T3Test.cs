@@ -141,7 +141,22 @@ namespace AssignmentTests
 		[Test()]
 		public void TestValidatesCreditRisk ()
 		{
-			Assert.Ignore ("Not implemented");
+			using(TempFileWrapper inFile = TestHelper.ExtractResourceToTempFile("AssignmentTests.Resources.t3-creditvalueerror.in")) {
+				this.Runner.StartApp(new string[] {inFile});
+				this.Runner.WriteInputLine("");
+				
+				List<string> lines = this.Runner.GetOutputLines ();
+				
+				Assert.AreEqual (2, lines.FindAll ((string s) => (new Regex("[Ee]rror")).IsMatch (s)).Count,
+				                 this.Runner.ExtendedMessage ().WithMessages ("Incorrect number of error reports", "This test should report exactly two errors"));
+				Assert.AreEqual (2, lines.FindAll ((string s) => (new Regex("(:?ABC|XYZ)123")).IsMatch (s)).Count,
+				                 this.Runner.ExtendedMessage ().WithMessages ("Incorrect number of loan names printed", "Each error should include the relevant loan name"));
+				Assert.AreEqual (1, lines.FindAll ((string s) => (new Regex("[Pp]repay [Rr]ate")).IsMatch (s)).Count,
+				                 this.Runner.ExtendedMessage ().WithMessage ("Expected field name for validation failure"));
+				Assert.AreEqual (1, lines.FindAll ((string s) => (new Regex("[Cc]redit [Rr]at(:?ing|e)")).IsMatch (s)).Count,
+				                 this.Runner.ExtendedMessage ().WithMessage ("Expected field name for validation failure"));
+				
+			}
 		}
 		
 		[Test()]
@@ -165,7 +180,7 @@ namespace AssignmentTests
 					Regex regex = new Regex(kvp.Value);
 					
 					Assert.AreEqual (2, lines.FindAll ((string s) => regex.IsMatch (s)).Count, 
-					                 this.Runner.ExtendedMessage ().WithMessages ("Failed to parse " + phrase, "Expected exactly two transactions with " + phrase + "field"));
+					                 this.Runner.ExtendedMessage ().WithMessages ("Failed to parse " + phrase, "Expected exactly two transactions with " + phrase + " field"));
 				}
 			}
 		}
