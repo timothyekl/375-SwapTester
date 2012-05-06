@@ -111,6 +111,22 @@ namespace AssignmentTests
 			return obj;
 			*/
 		}
+		
+		public static dynamic InvokeDynamicMethod (dynamic obj, string methodName, params object[] args) {
+			Type objType = obj.GetType ();
+			
+			MethodInfo method = objType.GetMethod (methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			if(method != null) {
+				return method.Invoke (obj, args);
+			} else {
+				PropertyInfo property = objType.GetProperty (methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+				if(property != null) {
+					return property.GetValue (obj, args);
+				} else {
+					throw new Exception ("Failed to invoke method " + methodName);
+				}
+			}
+		}
 	}
 	
 	public class TempFileWrapper : IDisposable

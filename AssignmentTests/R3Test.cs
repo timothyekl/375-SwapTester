@@ -71,13 +71,21 @@ namespace AssignmentTests
 			}
 			
 			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r1-full.in", "sample range.txt")) {
-				dynamic rangeSet = loader.GetRangeSetFromFile (inFile.ToString ());
-				
+				dynamic rangeSet = TestHelper.InvokeDynamicMethod (loader, "GetRangeSetFromFile", inFile.ToString ());
 				Assert.IsNotNull (rangeSet, "IRangeLoader implementation did not load range set properly");
-				Assert.IsTrue (rangeSet.Name.Contains ("sample"), "Loaded range set name is inaccurate");
-				Assert.AreEqual (4, (new List<Object> (rangeSet.Ranges)).Count, "Loaded range set has wrong number of ranges");
-				Assert.AreEqual (0, rangeSet.Errors.Count, "Loaded range set wrongly detected an error");
-				Assert.AreEqual ("Stud Credit", rangeSet.WhichRangeDoesThisNumberFitIn (840).Name, "Loaded range set provided wrong range name for value 840");
+				
+				dynamic rangeSetName = TestHelper.InvokeDynamicMethod (rangeSet, "Name");
+				Assert.IsTrue (rangeSetName.Contains ("sample"), "Loaded range set name is inaccurate");
+				
+				dynamic rangeSetRanges = TestHelper.InvokeDynamicMethod (rangeSet, "Ranges");
+				Assert.AreEqual (4, (new List<Object> (rangeSetRanges)).Count, "Loaded range set has wrong number of ranges");
+				
+				dynamic rangeSetErrors = TestHelper.InvokeDynamicMethod (rangeSet, "Errors");
+				Assert.AreEqual (0, rangeSetErrors.Count, "Loaded range set wrongly detected an error");
+				
+				dynamic resultingSet = TestHelper.InvokeDynamicMethod (rangeSet, "WhichRangeDoesThisNumberFitIn", 840);
+				dynamic resultingSetName = TestHelper.InvokeDynamicMethod (resultingSet, "Name");
+				Assert.AreEqual ("Stud Credit", resultingSetName, "Loaded range set provided wrong range name for value 840");
 			}
 		}
 		
@@ -130,12 +138,17 @@ namespace AssignmentTests
 			}
 			
 			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r3-incexc.in", "sample range.txt")) {
-				dynamic rangeSet = loader.GetRangeSetFromFile (inFile.ToString ());
-				
+				dynamic rangeSet = TestHelper.InvokeDynamicMethod (loader, "GetRangeSetFromFile", inFile.ToString ());
 				Assert.IsNotNull (rangeSet, "IRangeLoader implementation did not load range set properly");
-				Assert.IsTrue (rangeSet.Name.Contains ("sample"), "Loaded range set name is inaccurate");
-				Assert.AreEqual (4, (new List<Object> (rangeSet.Ranges)).Count, "Loaded range set has wrong number of ranges");
-				Assert.AreEqual (0, rangeSet.Errors.Count, "Loaded range set wrongly detected an error");
+				
+				dynamic rangeSetName = TestHelper.InvokeDynamicMethod (rangeSet, "Name");
+				Assert.IsTrue (rangeSetName.Contains ("sample"), "Loaded range set name is inaccurate");
+				
+				dynamic rangeSetRanges = TestHelper.InvokeDynamicMethod (rangeSet, "Ranges");
+				Assert.AreEqual (4, (new List<Object> (rangeSetRanges)).Count, "Loaded range set has wrong number of ranges");
+				
+				dynamic rangeSetErrors = TestHelper.InvokeDynamicMethod (rangeSet, "Errors");
+				Assert.AreEqual (0, rangeSetErrors.Count, "Loaded range set wrongly detected an error");
 				
 				Dictionary<double, string> expectedRanges = new Dictionary<double, string>() {
 					{850, null},
@@ -147,7 +160,11 @@ namespace AssignmentTests
 					{750, "OK credit"},
 					{600, "OK credit"},
 					{599, "Bad credit"},
+					{300, "Bad credit"},
+					{299, "Bad credit"},
+					{1, "Bad credit"},
 					{0, "Bad credit"},
+					{-1, "Bad credit"},
 					{-300, "Bad credit"},
 					{-301, null}
 				};
@@ -156,12 +173,15 @@ namespace AssignmentTests
 					double score = kvp.Key;
 					string creditName = kvp.Value;
 					
-					dynamic range = rangeSet.WhichRangeDoesThisNumberFitIn(score);
+					dynamic range = TestHelper.InvokeDynamicMethod (rangeSet, "WhichRangeDoesThisNumberFitIn", score);
 					if(creditName == null) {
 						Assert.IsNull (range, "Range set returned non-null range for out-of-set score " + score);
 					} else {
-						Assert.IsTrue (creditName.Equals(range.Name, StringComparison.OrdinalIgnoreCase), "Returned range had name " + range.Name + "; expected name " + creditName);
-						Assert.IsTrue (range.ThisNumberFitsInThisRange(score), "Range was returned properly but gives false for containment test");
+						Assert.IsNotNull (range, "Range set returned null range for in-set score " + score);
+						Assert.IsTrue (creditName.Equals(TestHelper.InvokeDynamicMethod (range, "Name"), StringComparison.OrdinalIgnoreCase), 
+						               "Returned range had name " + TestHelper.InvokeDynamicMethod (range, "Name") + "; expected name " + creditName);
+						Assert.IsTrue (TestHelper.InvokeDynamicMethod (range, "ThisNumberFitsInThisRange", score), 
+						               "Range was returned properly but gives false for containment test");
 					}
 				}
 			}
@@ -199,10 +219,13 @@ namespace AssignmentTests
 			
 			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r3-incexcerror.in", "sample error range.csv"))
 			{
-				dynamic rangeSet = loader.GetRangeSetFromFile (inFile.ToString ());
+				dynamic rangeSet = TestHelper.InvokeDynamicMethod (loader, "GetRangeSetFromFile", inFile.ToString ());
 				
-				Assert.AreEqual (1, rangeSet.Errors.Count, "Range set detected wrong number of errors");
-				Assert.AreEqual (0, new List<Object> (rangeSet.Ranges).Count, "Range set included ranges despite file error");
+				dynamic rangeSetErrors = TestHelper.InvokeDynamicMethod (rangeSet, "Errors");
+				Assert.AreEqual (1, rangeSetErrors.Count, "Range set detected wrong number of errors");
+				
+				dynamic rangeSetRanges = TestHelper.InvokeDynamicMethod (rangeSet, "Ranges");
+				Assert.AreEqual (0, new List<Object> (rangeSetRanges).Count, "Range set included ranges despite file error");
 			}
 		}
 	}
