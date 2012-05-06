@@ -232,12 +232,14 @@ namespace AssignmentTests
 			}
 			
 			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.t1.in", "sample range.txt")) {
-				dynamic transactions = loader.GetTransactionsFromFiles(new List<string> () {inFile.ToString()});
+				dynamic transactions = TestHelper.InvokeDynamicMethod(loader, "GetTransactionsFromFiles", new List<string> () {inFile.ToString()});
 				
+				Assert.IsNotNull (transactions, "Expected non-null transaction set");
 				Assert.AreEqual (3, transactions.Count, "Expected three transactions to load");
+				
 				foreach(dynamic transaction in transactions) {
-					Assert.IsTrue ((new Regex("^[ABC]$")).IsMatch (transaction.Name), "Expected transaction name to be A, B, or C");
-					Assert.Fail (transaction.Name);
+					dynamic transactionName = TestHelper.InvokeDynamicMethod (transaction, "Name");
+					Assert.IsTrue ((new Regex("^[ABC]$")).IsMatch (transactionName), "Expected transaction name to be A, B, or C");
 				}
 			}
 		}
