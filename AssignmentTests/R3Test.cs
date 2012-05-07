@@ -137,7 +137,7 @@ namespace AssignmentTests
 				Assert.Ignore ("Failed to find implementation of IRangeLoader:\n" + e.Message);
 			}
 			
-			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r3-incexc.in", "sample range.txt")) {
+			using (TempFileWrapper inFile = TestHelper.ExtractResourceToTempFileWithName ("AssignmentTests.Resources.r3-incexc.in", "sample range.csv")) {
 				dynamic rangeSet = TestHelper.InvokeDynamicMethod (loader, "GetRangeSetFromFile", inFile.ToString ());
 				Assert.IsNotNull (rangeSet, "IRangeLoader implementation did not load range set properly");
 				
