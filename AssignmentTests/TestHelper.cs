@@ -138,7 +138,11 @@ namespace AssignmentTests
 		}
 		
 		void IDisposable.Dispose() {
-			File.Delete(this.Path);
+			try{
+				File.Delete(this.Path);
+			} catch (IOException) {
+				// Do nothing
+			}
 		}
 		
 		public override string ToString() {
